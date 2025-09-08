@@ -1,0 +1,37 @@
+[
+  {
+    "titulo": "Quiz — Skinner",
+    "descricao": "Verificação de aprendizagem com 10 questões sobre Skinner.",
+    "url": "./quiz_skinner_v2.html",
+    "data": "2025-09-07",
+    "tags": ["quiz", "skinner", "aprendizagem"]
+  },
+  {
+    "titulo": "Seminário — Boas-vindas",
+    "descricao": "Dinâmica de recepção e lista de participantes (HTML).",
+    "url": "./SKINER1.html",
+    "data": "2025-09-06",
+    "tags": ["seminário", "boas-vindas"]
+  },
+  {
+    "titulo": "Fading (atividade)",
+    "descricao": "Exercício interativo de diferenciação de estímulos.",
+    "url": "./Fading.html",
+    "data": "2025-09-05",
+    "tags": ["atividade", "fading"]
+  },
+  {
+    "titulo": "Instruções Programadas",
+    "descricao": "Sequência de etapas com feedback imediato.",
+    "url": "./Instrucao.html",
+    "data": "2025-09-04",
+    "tags": ["ensino programado"]
+  },
+  {
+    "titulo": "Método Keller (PSI) — DEMO",
+    "descricao": "Estudo individualizado com domínio por unidade.",
+    "url": "./keller.html",
+    "data": "2025-09-03",
+    "tags": ["PSI", "Keller"]
+  }
+]
