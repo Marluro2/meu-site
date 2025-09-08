@@ -35,3 +35,20 @@
     "tags": ["PSI", "Keller"]
   }
 ]
+
+[
+  {
+    "titulo": "Funções testes",
+    "arquivo": "docs/Modulo11.pdf"
+  },
+  {
+    "titulo": "Apresentação Doutorado",
+    "arquivo": "docs/apresentacao1.pdf"
+  },
+  {
+    "titulo": "Tese em andamento",
+    "arquivo": "docs/tese.pdf"
+  }
+]
+
+
