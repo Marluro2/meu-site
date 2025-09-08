@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Verificação de Aprendizagem — Skinner (HTML)</title>
+  <meta name="theme-color" content="#0b0b0c" />
+  <style>
+    :root{
+      --bg:#0b0b0c;--card:#111114;--muted:#c7c7cc;--text:#f6f6f7;
+      --gold:#ffca28;--line:#222228;--ok:#b9f6ca;--warn:#ffe082;
+      --ok-text:#064e3b;--warn-text:#4e342e;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    .wrap{max-width:980px;margin:0 auto;padding:20px}
+    header{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    h1{font-size:clamp(20px,4vw,28px);margin:0;color:var(--gold)}
+    .muted{color:var(--muted)}
+    .card{background:var(--card);border:1px solid var(--line);
+      border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,.35);padding:18px}
+    .title-q{font-size:clamp(18px,3.4vw,22px);font-weight:800;color:var(--gold);margin:12px 0 6px}
+    .enun{font-size:clamp(16px,3vw,20px);margin:0 0 10px}
+    .opts{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+    label.opt{display:flex;gap:10px;align-items:flex-start;background:#0f1115;border:1px solid #22252c;
+      border-radius:12px;padding:12px;cursor:pointer}
+    .opt input{margin-top:4px}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+    .progress{height:10px;background:#1a1a1f;border-radius:999px;overflow:hidden;flex:1}
+    .bar{height:100%;width:0;background:var(--gold);transition:width .25s ease}
+    .score{min-width:140px;text-align:right}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+    button{border:1px solid transparent;background:#1f2937;color:var(--gold);
+      padding:12px 18px;border-radius:12px;font-weight:800;cursor:pointer}
+    button:hover{transform:translateY(-1px);background:#243244}
+    button.outline{background:transparent;border-color:var(--gold);color:var(--gold)}
+    button[disabled]{opacity:.5;cursor:not-allowed;transform:none}
+    .feedback{margin-top:12px;display:none}
+    .ok{background:var(--ok);color:var(--ok-text)}
+    .warn{background:var(--warn);color:var(--warn-text)}
+    .fb{border-radius:12px;padding:12px;border:1px dashed #0006}
+    .center{display:grid;place-items:center;height:20vh}
+    footer{margin-top:18px;color:#9aa0a6;font-size:12px;text-align:center}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Verificação de Aprendizagem — Skinner</h1>
+      <div class="row" style="gap:12px;flex:1">
+        <div class="progress"><div id="bar" class="bar"></div></div>
+        <div id="score" class="score muted">Score: 0/0</div>
+      </div>
+    </header>
+
+    <main id="main" class="card">
+      <div class="center muted">Carregando…</div>
+    </main>
+
+    <div class="actions">
+      <button id="btnConfirm">Confirmar</button>
+      <button id="btnNext" class="outline" disabled>Próxima</button>
+    </div>
+
+    <footer>HTML gerado a partir do seu script Flet. © Você</footer>
+  </div>
+
+  <script>
+    // ----- Banco de questões & mensagens (copiado do seu .py) -----
+    const QUESTOES = [{"id": 1, "titulo": "Exercício 1 – Reforço", "enunciado": "Skinner defendia que o comportamento humano pode ser explicado pelo condicionamento operante. Nesse processo, o reforço desempenha papel central. Qual das alternativas melhor exemplifica um reforço positivo?", "alternativas": {"A": "Um aluno perde pontos por falar na aula.", "B": "Um professor ignora a resposta errada do estudante.", "C": "Um estudante recebe elogio ao acertar uma questão.", "D": "Um funcionário perde uma bonificação por chegar atrasado.", "E": "Um aluno deixa de fazer uma tarefa para evitar bronca."}, "correta": "C", "justificativa": "Reforço positivo envolve ADICIONAR um estímulo agradável após um comportamento (por exemplo, elogio), aumentando a probabilidade de o comportamento se repetir."}, {"id": 2, "titulo": "Exercício 2 – Caixa de Skinner", "enunciado": "A famosa 'Caixa de Skinner' foi usada em experimentos para estudar o comportamento de ratos e pombos. O objetivo principal desse aparato era:", "alternativas": {"A": "Medir a inteligência natural dos animais.", "B": "Estudar o comportamento apenas inato, sem influência externa.", "C": "Demonstrar o processo de reforço e punição no condicionamento operante.", "D": "Observar como os animais aprendem apenas por imitação.", "E": "Verificar a evolução da espécie ao longo de gerações."}, "correta": "C", "justificativa": "A caixa permite controlar estímulos e consequências (reforços/punições) para observar como eles moldam o comportamento operante."}, {"id": 3, "titulo": "Exercício 3 – Punição", "enunciado": "No condicionamento operante, Skinner diferencia reforço de punição. Qual das alternativas apresenta um exemplo de punição negativa?", "alternativas": {"A": "Retirar o celular de um aluno por usar durante a aula.", "B": "Obrigar o aluno a copiar 100 vezes uma frase.", "C": "Dar um prêmio por um bom desempenho.", "D": "Aplicar uma suspensão escolar.", "E": "Elogiar o aluno na frente da turma."}, "correta": "A", "justificativa": "Punição negativa = REMOVER um estímulo agradável (por exemplo, celular) para reduzir um comportamento indesejado."}, {"id": 4, "titulo": "Exercício 4 – Ensino Programado", "enunciado": "Skinner propôs o uso de máquinas de ensino e ensino programado. O princípio fundamental desse método é:", "alternativas": {"A": "Aprendizagem baseada em tentativas aleatórias.", "B": "Estímulo a respostas criativas sem correção imediata.", "C": "Progressão passo a passo com reforços imediatos.", "D": "Exposição a conteúdos longos sem feedback.", "E": "Avaliação somente no final do processo."}, "correta": "C", "justificativa": "Ensino programado divide o conteúdo em passos pequenos, solicita resposta ativa e fornece reforço imediato, consolidando o aprendizado."}, {"id": 5, "titulo": "Exercício 5 – Aplicações Educacionais", "enunciado": "Na prática educacional, o behaviorismo de Skinner pode ser aplicado de diversas formas. Qual situação exemplifica corretamente esse uso?", "alternativas": {"A": "Debates livres sem se preocupar com respostas corretas.", "B": "Valorizar apenas reflexão filosófica, sem respostas objetivas.", "C": "Usar recompensas e feedback imediato para estimular respostas corretas.", "D": "Ensino espontâneo, sem planejamento de reforços.", "E": "Aprendizado depende apenas da predisposição natural."}, "correta": "C", "justificativa": "Aplicações educacionais inspiradas em Skinner enfatizam reforços e feedback imediato para fortalecer respostas desejadas."}, {"id": 6, "titulo": "Exercício 6 – Condicionamento Operante", "enunciado": "O condicionamento operante, segundo Skinner, difere do condicionamento clássico de Pavlov porque:", "alternativas": {"A": "É baseado apenas em reflexos involuntários.", "B": "Associa estímulos neutros e incondicionados.", "C": "Centra-se no comportamento voluntário e em suas consequências.", "D": "Dispensa reforços e punições.", "E": "Não se aplica a ambientes educacionais."}, "correta": "C", "justificativa": "Operante foca em respostas voluntárias controladas por consequências; clássico foca em respostas reflexas eliciadas por estímulos."}, {"id": 7, "titulo": "Exercício 7 – Reforço Negativo", "enunciado": "O reforço negativo é frequentemente confundido com punição. Qual exemplo representa corretamente reforço negativo?", "alternativas": {"A": "Perder a chance de brincar por não fazer a lição.", "B": "Professor retira uma tarefa extra quando a turma se comporta bem.", "C": "Receber elogio por acertar uma resposta.", "D": "Ser suspenso por mau comportamento.", "E": "Ganhar um presente por terminar a tarefa."}, "correta": "B", "justificativa": "Reforço negativo = REMOVER um estímulo aversivo (tarefa extra) após um comportamento adequado, aumentando sua probabilidade."}, {"id": 8, "titulo": "Exercício 8 – Modelagem (Shaping)", "enunciado": "Skinner descreveu a modelagem como técnica de ensino. Essa técnica consiste em:", "alternativas": {"A": "Aprender só por observação.", "B": "Reforçar aproximações sucessivas até o comportamento-alvo.", "C": "Usar punições severas apenas.", "D": "Avaliar sem feedback.", "E": "Promover debates espontâneos sem reforços."}, "correta": "B", "justificativa": "Modelagem reforça passos intermediários (aproximações) que levam ao comportamento final desejado."}, {"id": 9, "titulo": "Exercício 9 – Programas de Reforço", "enunciado": "Qual alternativa exemplifica um programa de reforço de razão fixa?", "alternativas": {"A": "Receber uma estrela a cada 5 exercícios corretos.", "B": "Elogios em momentos aleatórios.", "C": "Recompensa quando o professor se lembra.", "D": "Reforço em intervalos de tempo variados.", "E": "Nota apenas ao final do semestre."}, "correta": "A", "justificativa": "Razão fixa: reforço após número fixo de respostas (ex.: a cada 5 acertos)."}, {"id": 10, "titulo": "Exercício 10 – Crítica ao Behaviorismo", "enunciado": "Uma das críticas ao behaviorismo de Skinner é:", "alternativas": {"A": "Ênfase excessiva em processos inconscientes.", "B": "Falta de evidências experimentais.", "C": "Foco exagerado em processos internos da mente.", "D": "Visão mecanicista, reduzindo o humano a estímulo-resposta.", "E": "Defesa da liberdade total do aluno, sem controle."}, "correta": "D", "justificativa": "Críticas comuns apontam reducionismo/visão mecanicista e pouca ênfase em processos mentais internos."}];
+    const MOTIVACIONAIS = ["Excelente! Cada acerto reforça seu hábito de aprender!", "Ótimo trabalho! Comportamentos reforçados tendem a se repetir.", "Parabéns! Você está modelando o conhecimento passo a passo.", "Mandou bem! O reforço positivo consolida sua trajetória.", "Show! Persistência e feedback imediato funcionam!"];
+    const NAO_DESISTA = ["Não desista! Aprender é um processo cumulativo.", "Siga em frente! O erro também informa o próximo passo.", "Força! Ajuste a rota e tente outra vez.", "Tranquilo! Feedback imediato ajuda a progredir.", "Continue! Cada tentativa aproxima do acerto."];
+
+    // ----- Estado -----
+    let idx = 0;
+    let score = 0;
+    let answered = false;
+
+    // ----- UI refs -----
+    const main = document.getElementById('main');
+    const bar = document.getElementById('bar');
+    const scoreEl = document.getElementById('score');
+    const btnConfirm = document.getElementById('btnConfirm');
+    const btnNext = document.getElementById('btnNext');
+
+    function renderQuestion(i){
+      answered = false;
+      const q = QUESTOES[i];
+      const total = QUESTOES.length;
+      bar.style.width = ((i)/total*100) + '%';
+      scoreEl.textContent = `Score: ${score}/${i}`;
+
+      const opts = Object.entries(q.alternativas).map(([letra, txt])=>{
+        return `<label class="opt"><input type="radio" name="alt" value="${letra}"><div><strong>${letra})</strong> ${txt}</div></label>`;
+      }).join("");
+
+      main.innerHTML = `
+        <div class="title-q">${q.titulo}</div>
+        <p class="enun">${q.enunciado}</p>
+        <div class="opts" id="opts">${opts}</div>
+        <div id="fbWrap" class="feedback"></div>
+      `;
+      btnConfirm.disabled = false;
+      btnNext.disabled = true;
+    }
+
+    function rnd(arr){ return arr[Math.floor(Math.random()*arr.length)] }
+
+    btnConfirm.addEventListener('click', ()=>{
+      if (answered) return;
+      const sel = main.querySelector('input[name="alt"]:checked');
+      if (!sel){
+        alert('Selecione uma alternativa.');
+        return;
+      }
+      answered = true;
+      const q = QUESTOES[idx];
+      const correta = q.correta;
+      const acertou = (sel.value === correta);
+      const fbWrap = document.getElementById('fbWrap');
+
+      if (acertou){
+        score++;
+        fbWrap.innerHTML = `
+          <div class="fb ok">
+            <strong>✓ Resposta correta!</strong><br>${rnd(MOTIVACIONAIS)}
+          </div>`;
+      }else{
+        const textoCorreto = q.alternativas[correta];
+        fbWrap.innerHTML = `
+          <div class="fb warn">
+            <strong>✗ Não foi dessa vez</strong><br>${rnd(NAO_DESISTA)}<br>
+            <em>Correta:</em> ${correta}) ${textoCorreto}<br>
+            <em>Justificativa:</em> ${q.justificativa}
+          </div>`;
+      }
+      fbWrap.style.display = 'block';
+      btnConfirm.disabled = true;
+      btnNext.disabled = false;
+      scoreEl.textContent = `Score: ${score}/${idx+1}`;
+    });
+
+    btnNext.addEventListener('click', ()=>{
+      if (idx < QUESTOES.length - 1){
+        idx++;
+        renderQuestion(idx);
+      } else {
+        finish();
+      }
+    });
+
+    function finish(){
+      const total = QUESTOES.length;
+      const pct = Math.round(score/total*100);
+      const msg = pct>=80 ? "Excelente desempenho!" : (pct>=60 ? "Muito bom! Continue praticando." : "Bom começo! Persistência gera progresso.");
+      bar.style.width = '100%';
+      main.innerHTML = `
+        <div class="title-q">Resultado</div>
+        <div class="fb ok" style="display:block;background:#0f1115;color:#e5e7eb;border:1px solid #2a2a2e">
+          <p><strong>Acertos:</strong> ${score} de ${total} (${pct}%)</p>
+          <p>${msg}</p>
+        </div>
+      `;
+      btnConfirm.disabled = true;
+      btnNext.disabled = true;
+    }
+
+    // start
+    renderQuestion(idx);
+  </script>
+</body>
+</html>

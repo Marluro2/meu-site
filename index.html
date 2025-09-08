@@ -1,70 +1,114 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Atividades do Programa de Doutorado</title>
+
+  <meta name="description" content="Página oficial das atividades do Programa de Doutorado em Ciências e Tecnologias." />
+  <meta property="og:title" content="Atividades do Programa de Doutorado" />
+  <meta property="og:description" content="Acompanhe atividades, eventos e materiais do doutorado." />
+  <meta property="og:type" content="website" />
+
   <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: #0b0b0c;
-      color: #f6f6f7;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+    :root{
+      --bg:#0b0b0c; --card:#121214; --muted:#2a2a2e; --text:#f6f6f7;
+      --sub:#c7c7cc; --gold:#ffca28; --line:#1f1f23;
     }
-    header {
-      background: #121214;
-      padding: 20px;
-      text-align: center;
-      border-bottom: 1px solid #1f1f23;
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+
+    /* Header & nav */
+    header{border-bottom:1px solid var(--line);background:var(--card)}
+    .container{max-width:1100px;margin:0 auto;padding:16px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+    .brand h1{font-size:22px;color:var(--gold);margin:0;font-weight:800}
+
+    /* Nav actions (buttons) */
+    .nav-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .nav-actions .btn-nav{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 14px;border-radius:999px;
+      background:#1f2937;color:var(--gold);text-decoration:none;font-weight:700;
+      border:1px solid #1f1f23;transition:.15s;
     }
-    header h1 {
-      margin: 0;
-      color: #ffca28; /* dourado */
-      font-size: 28px;
-      font-weight: 700;
-    }
-    main {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 40px 16px;
-      text-align: center;
-    }
-    main p {
-      max-width: 800px;
-      font-size: 20px;
-      line-height: 1.6;
-      color: #c7c7cc;
-    }
-    footer {
-      text-align: center;
-      padding: 16px;
-      background: #121214;
-      border-top: 1px solid #1f1f23;
-      color: #a3a3a8;
-    }
+    .nav-actions .btn-nav:hover{background:#243244}
+
+    /* Hero */
+    .hero{padding:42px 16px;text-align:center}
+    .hero h2{font-size:30px;margin:0 0 10px 0;color:var(--gold)}
+    .hero p{margin:0 auto;max-width:820px;color:var(--sub);font-size:18px;line-height:1.6}
+
+    /* Cards */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:0 16px 36px}
+    @media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:640px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px}
+    .card h3{margin:0;color:var(--text);font-size:18px}
+    .card p{margin:0;color:var(--sub)}
+    .card a{margin-top:auto;display:inline-block;background:#1f2937;color:var(--gold);padding:10px 14px;border-radius:999px;text-decoration:none;font-weight:700}
+    .card a:hover{background:#243244}
+
+    /* Footer */
+    footer{border-top:1px solid var(--line);background:var(--card);color:#a3a3a8}
+    footer .container{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
   </style>
 </head>
 <body>
   <header>
-    <h1>Atividades do Programa de Doutorado em Ciências e Tecnologias</h1>
+    <div class="container topbar">
+      <a class="brand" href="./">
+        <span aria-hidden="true">🎓</span>
+        <h1>Atividades do Doutorado em Ciências e Tecnologias</h1>
+      </a>
+      <nav class="nav-actions" aria-label="Ações rápidas">
+        <a class="btn-nav" href="./SKINER1.html">🎓 Seminário</a>
+        <a class="btn-nav" href="./Fading.html">🪄 Fading</a>
+        <a class="btn-nav" href="./Instrucao.html">📘 Instruções</a>
+        <a class="btn-nav" href="./keller.html">🧩 Keller</a>
+      </nav>
+    </div>
   </header>
 
   <main>
-    <p>Bem-vindo(a)! Esta página será o espaço para acompanhar as atividades e produções relacionadas ao Doutorado em Ciências e Tecnologias.  
-    Em breve, novos itens serão adicionados aqui.</p>
+    <section class="hero">
+      <h2>Bem-vindo(a)!</h2>
+      <p>Este portal reunirá as atividades, eventos e materiais do Programa de Doutorado em Ciências e Tecnologias. 
+         Novas seções serão adicionadas gradualmente. Enquanto isso, você já pode acessar os materiais abaixo.</p>
+    </section>
+
+    <section class="container">
+      <div class="grid">
+        <div class="card">
+          <h3>Seminário — Boas‑vindas</h3>
+          <p>Página com a dinâmica de recepção e lista de participantes (versão HTML).</p>
+          <a href="./SKINER1.html">Abrir</a>
+        </div>
+        <div class="card">
+          <h3>Fading (atividade)</h3>
+          <p>Exercício interativo de diferenciação de estímulos.</p>
+          <a href="./Fading.html">Abrir</a>
+        </div>
+        <div class="card">
+          <h3>Instruções Programadas</h3>
+          <p>Exemplo de ensino programado com etapas interativas.</p>
+          <a href="./Instrucao.html">Abrir</a>
+        </div>
+        <div class="card">
+          <h3>Método Keller</h3>
+          <p>Atividade de estudo individualizado com base no PSI.</p>
+          <a href="./keller.html">Abrir</a>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer>
-    © <span id="ano"></span> Márcio Lúcio Rodrigues
+    <div class="container">
+      <p>&copy; 2025 Programa de Doutorado em Ciências e Tecnologias</p>
+      <p>Desenvolvido com ❤️ e hospedado no GitHub Pages</p>
+    </div>
   </footer>
-
-  <script>
-    document.getElementById("ano").textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>

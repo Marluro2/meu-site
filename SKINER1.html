@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Seminário — Boas-vindas (HTML)</title>
+  <style>
+    :root {
+      --bg: #0b0b0c;
+      --card: #121214;
+      --muted: #2a2a2e;
+      --text: #f6f6f7;
+      --subtext: #c7c7cc;
+      --gold: #ffca28;
+      --gold-dim: #b28900;
+    }
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg); color: var(--text);
+    }
+    .wrap { padding: 24px; max-width: 1200px; margin: 0 auto }
+    .row { display: flex; gap: 20px }
+    .col { display: flex; flex-direction: column; gap: 16px }
+    .left { flex: 3 }
+    .right { flex: 2 }
+    .card {
+      background: var(--card);
+      border-radius: 18px; padding: 30px; box-shadow: 0 8px 30px rgba(0,0,0,.35);
+      border: 1px solid #1c1c20;
+    }
+    .header { display: flex; align-items: center; gap: 16px }
+    .foto { width: 160px; height: 160px; object-fit: contain; border-radius: 16px; background:#0f0f11; border:1px dashed #27272a }
+    h1 { margin: 0; font-weight: 700; font-size: 28px; color: var(--gold) }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 12px 18px; border-radius: 999px; border: 1px solid transparent;
+      background: #1f2937; color: var(--gold); cursor: pointer; font-weight: 700; font-size: 16px;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); background: #243244 }
+    .btn:active { transform: translateY(0) scale(.99) }
+    .btn-outline { background: transparent; border-color: var(--gold); color: var(--gold) }
+    .btn-ghost { background: transparent; color: var(--gold) }
+    .controls-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px }
+    input[type="text"] {
+      width: 380px; max-width: 100%; padding: 12px 14px; border-radius: 14px; border: 1px solid #2b2b31;
+      background: #0f1115; color: var(--gold); outline: none; font-size: 16px;
+    }
+    input[type="file"] { display: none }
+    .divider { height: 1px; background: #2b2b31; border: 0 }
+    .big-name { text-align: center; font-size: 56px; font-weight: 800; color: var(--gold); margin: 8px 0 }
+    .msg-box {
+      min-height: 88px; display: grid; place-items: center; padding: 18px; background: #fff3cd;
+      color: #111827; border-radius: 16px; transition: opacity .35s ease; opacity: 1;
+    }
+    .msg-box.hide { opacity: 0 }
+    .side { padding: 10px; background: var(--card); border-radius: 16px; height: calc(100% - 20px); }
+    .side h3 { margin: 0; color: var(--gold) }
+    .list { margin-top: 6px; height: calc(100% - 60px); overflow: auto; padding-right: 6px }
+    .list p { margin: 6px 0; font-size: 18px; color: var(--gold) }
+    .banner {
+      position: fixed; left: 16px; right: 16px; bottom: 16px; background: #1a1a1d; color: var(--gold);
+      border: 1px solid #2c2c30; border-radius: 16px; padding: 12px 14px; display: none; align-items: center; gap: 10px
+    }
+    .banner.show { display: flex }
+    .overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.88); display: none; z-index: 20;
+      align-items: center; justify-content: center; padding: 24px
+    }
+    .overlay.show { display: flex }
+    .overlay-card { background: #0d0d0f; border:1px solid #27272a; border-radius: 18px; padding: 20px; width: 680px; max-width: 100% }
+    .overlay h2 { margin: 0 0 8px 0; color: var(--gold) }
+    .winner-name { text-align:center; font-size: 64px; font-weight: 800; color: var(--gold); margin: 12px 0 }
+    .muted { color: var(--subtext) }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="row">
+      <div class="col left">
+        <div class="card">
+          <div class="header">
+            <img id="foto" class="foto" alt="foto" src="" onerror="this.src=''; this.alt='[foto]';" />
+            <h1>A teoria behaviorista de SKiner</h1>
+          </div>
+
+          <div class="controls-row" style="margin-top:12px">
+            <input type="text" id="nome" placeholder="Digite seu nome (ex.: Maria Silva)" />
+            <button class="btn" id="btn-inserir">🎉 Inserir</button>
+            <label class="btn btn-ghost" for="foto-file">🖼️ Selecione uma foto…</label>
+            <input id="foto-file" type="file" accept="image/png,image/jpeg,image/webp" />
+          </div>
+
+          <hr class="divider" />
+          <div id="nomeView" class="big-name"></div>
+          <div id="msgBox" class="msg-box"><span id="mensagem"></span></div>
+          <hr class="divider" />
+
+          <div class="controls-row">
+            <button class="btn btn-outline" id="btn-export">⬇️ Exportar participantes (CSV)</button>
+            <button class="btn" id="btn-sorteio">🎁 Sorteio</button>
+            <button class="btn btn-outline" id="btn-reset-sorteio">↻ Reiniciar sorteio</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="side">
+          <h3>Participantes</h3>
+          <hr class="divider" />
+          <div id="lista" class="list" aria-live="polite"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Banner -->
+  <div id="banner" class="banner" role="alert">
+    <span>ℹ️ Digite seu nome e clique em Inserir para aparecer na tela!</span>
+    <button class="btn btn-ghost" id="close-banner">OK</button>
+  </div>
+
+  <!-- Overlay: Vencedor -->
+  <div id="overlay-win" class="overlay" aria-modal="true" role="dialog">
+    <div class="overlay-card">
+      <h2>🎁 Vencedor do Sorteio</h2>
+      <div id="winnerName" class="winner-name"></div>
+      <label style="display:flex; align-items:center; gap:8px; margin-bottom:12px">
+        <input type="checkbox" id="cb-remover" /> Remover do próximo sorteio
+      </label>
+      <div class="controls-row">
+        <button class="btn" id="btn-sorteie-novamente">🎲 Sorteie de novo</button>
+        <button class="btn btn-outline" id="btn-ok">✔️ OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const EMOJIS_FESTA = ["🎉","🎊","✨","🏆","👏","💡","🚀","🌟"];
+    const MENSAGENS = [
+      "É um prazer contar com sua presença, {nome}.",
+      "Agradecemos sua presença, {nome}. Seja bem-vindo(a)!",
+      "Que bom ter você conosco, {nome}.",
+      "Sua participação faz a diferença, {nome}.",
+      "Você é muito bem-vindo(a) entre nós, {nome}.",
+    ];
+
+    let frasesDisponiveis = shuffle([...MENSAGENS]);
+    const participantes = [];
+    const excluidosSorteio = new Set();
+    let ultimoVencedor = "";
+
+    function shuffle(arr){
+      for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr;
+    }
+    function agora(){
+      const d = new Date();
+      const pad = n => String(n).padStart(2,'0');
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    }
+    function baixarCSV(nomeArquivo, linhas){
+      const csv = linhas.map(l => l.map(v => `"${String(v).replaceAll('"','\"')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = nomeArquivo; a.click();
+      setTimeout(()=> URL.revokeObjectURL(url), 5000);
+    }
+
+    const elNome = document.getElementById('nome');
+    const btnInserir = document.getElementById('btn-inserir');
+    const btnExport = document.getElementById('btn-export');
+    const btnSorteio = document.getElementById('btn-sorteio');
+    const btnResetSorteio = document.getElementById('btn-reset-sorteio');
+    const nomeView = document.getElementById('nomeView');
+    const msgBox = document.getElementById('msgBox');
+    const mensagem = document.getElementById('mensagem');
+    const lista = document.getElementById('lista');
+    const banner = document.getElementById('banner');
+    const closeBanner = document.getElementById('close-banner');
+    const fotoFile = document.getElementById('foto-file');
+    const fotoImg = document.getElementById('foto');
+
+    const overlayWin = document.getElementById('overlay-win');
+    const winnerName = document.getElementById('winnerName');
+    const cbRemover = document.getElementById('cb-remover');
+    const btnSorteieNovamente = document.getElementById('btn-sorteie-novamente');
+    const btnOk = document.getElementById('btn-ok');
+
+    function mostrarBanner(){ banner.classList.add('show'); }
+    function fecharBanner(){ banner.classList.remove('show'); }
+
+    function inserirParticipante(){
+      const nome = (elNome.value || '').trim();
+      if(!nome){ alert('Por favor, digite um nome.'); return }
+
+      if(frasesDisponiveis.length === 0) frasesDisponiveis = shuffle([...MENSAGENS]);
+      const frase = frasesDisponiveis.pop().replace('{nome}', nome);
+      const emoji = EMOJIS_FESTA[Math.floor(Math.random() * EMOJIS_FESTA.length)];
+
+      nomeView.textContent = nome;
+      msgBox.classList.add('hide');
+      setTimeout(()=>{
+        mensagem.textContent = `${emoji} ${frase}`;
+        msgBox.classList.remove('hide');
+      }, 200);
+
+      elNome.value = '';
+
+      const ts = agora();
+      participantes.push({ nome, timestamp: ts });
+      const p = document.createElement('p');
+      p.textContent = `• ${nome} — ${ts}`;
+      lista.appendChild(p);
+    }
+
+    function exportarCSV(){
+      const linhas = [["Nome","Data/Hora"], ...participantes.map(p => [p.nome, p.timestamp])];
+      baixarCSV('participantes_seminario.csv', linhas);
+    }
+
+    function nomesUnicos(){
+      const set = new Set(); const arr = [];
+      for(const p of participantes){ const n = p.nome.trim(); if(n && !set.has(n)){ set.add(n); arr.push(n) } }
+      return arr;
+    }
+
+    function abrirOverlay(el){ el.classList.add('show') }
+    function fecharOverlay(el){ el.classList.remove('show') }
+
+    function sortear(){
+      const pool = nomesUnicos().filter(n => !excluidosSorteio.has(n));
+      if(pool.length === 0){ alert('Sem participantes elegíveis para sorteio.'); return }
+      const vencedor = pool[Math.floor(Math.random() * pool.length)];
+      ultimoVencedor = vencedor;
+      cbRemover.checked = false;
+      winnerName.textContent = vencedor;
+      abrirOverlay(overlayWin);
+    }
+
+    function confirmarWinner(){
+      if(cbRemover.checked && ultimoVencedor){ excluidosSorteio.add(ultimoVencedor) }
+      fecharOverlay(overlayWin);
+    }
+
+    function sortearDeNovo(){
+      confirmarWinner();
+      sortear();
+    }
+
+    function resetarSorteio(){
+      excluidosSorteio.clear();
+      alert('Sorteio reiniciado: todos os participantes voltam a concorrer.');
+    }
+
+    btnInserir.addEventListener('click', inserirParticipante);
+    elNome.addEventListener('keydown', e => { if(e.key === 'Enter') inserirParticipante() });
+    btnExport.addEventListener('click', exportarCSV);
+    btnSorteio.addEventListener('click', sortear);
+    btnResetSorteio.addEventListener('click', resetarSorteio);
+
+    btnSorteieNovamente.addEventListener('click', sortearDeNovo);
+    btnOk.addEventListener('click', confirmarWinner);
+
+    closeBanner.addEventListener('click', fecharBanner);
+    setTimeout(mostrarBanner, 400);
+
+    fotoFile.addEventListener('change', (e)=>{
+      const f = e.target.files?.[0];
+      if(!f) return;
+      const url = URL.createObjectURL(f);
+      fotoImg.src = url;
+    });
+  </script>
+</body>
+</html>

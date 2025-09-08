@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fading — Reconhecer o Nome</title>
+  <style>
+    :root{
+      --bg:#0b0b0c;--card:#111114;--muted:#2a2a2e;--text:#f6f6f7;--gold:#ffca28;--gold-100:#fff3cd;--gold-700:#b28900;
+      --ok:#a7f3d0;--ok-fg:#064e3b;--err:#fecaca;--err-fg:#7f1d1d
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    .wrap{max-width:1200px;margin:0 auto;padding:24px}
+    .card{background:var(--card);border:1px solid #1f1f23;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,.35);padding:24px}
+    h1{margin:0 0 6px 0;font-weight:800;color:var(--gold)}
+    .gold{color:var(--gold)}
+    .muted{color:#c7c7cc}
+    .row{display:flex;gap:16px;align-items:center;justify-content:space-between}
+    .col{display:flex;flex-direction:column;gap:14px}
+    .center{display:flex;align-items:center;justify-content:center}
+
+    .input{
+      width:500px;max-width:100%;padding:12px 14px;border-radius:14px;border:1px solid #2b2b31;background:#0f1115;color:var(--gold);font-size:18px
+    }
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:14px;border:1px solid transparent;cursor:pointer;font-weight:800;color:var(--gold);background:#1f2937;transition:.15s ease}
+    .btn:hover{transform:translateY(-1px);background:#243244}
+    .btn-outline{background:transparent;border-color:var(--gold)}
+    .btn[disabled]{opacity:.5;pointer-events:none}
+
+    .prog{appearance:none;width:460px;max-width:100%;height:10px;border-radius:999px;background:#1f2937;overflow:hidden}
+    .prog>span{display:block;height:100%;background:var(--gold);width:0%}
+
+    .stack{display:flex;gap:40px;align-items:center;justify-content:center}
+    .cardbox{width:320px;height:180px;border-radius:12px;background:#111827;display:grid;place-items:center;position:relative;border:1px solid #222}
+    .cardbox .label{font-size:40px;font-weight:800;color:var(--gold)}
+    .overlay{position:absolute;inset:0;border-radius:12px;background:#ffe082;opacity:0;pointer-events:none}
+
+    .feedback{display:none}
+    .feedback.show{display:block}
+    .fbok{background:var(--ok);color:var(--ok-fg)}
+    .fberr{background:var(--err);color:var(--err-fg)}
+    .fbx{border-radius:12px;padding:12px;margin-top:8px}
+
+    .section{display:none}
+    .section.show{display:block}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <!-- HOME -->
+      <section id="home" class="section show">
+        <h1>FADING — Diferencie o seu nome de um nome parecido</h1>
+        <p class="muted">Digite seu nome. O app gera um nome muito parecido. Seu objetivo é <b>sempre</b> selecionar o seu nome verdadeiro. A cada nível, o destaque visual vai diminuindo (fading).</p>
+        <div class="col">
+          <input id="nome" class="input" placeholder="Seu nome (ex.: Maria Silva)" />
+          <button id="btn-start" class="btn">▶️ Gerar nome parecido e iniciar</button>
+          <div id="preview" class="muted"></div>
+        </div>
+      </section>
+
+      <!-- ATIVIDADE -->
+      <section id="atividade" class="section">
+        <div class="row">
+          <h1>Escolha <u>sempre</u> o seu nome verdadeiro</h1>
+        </div>
+        <p class="muted">Conquiste 3 acertos para reduzir o destaque (fading) e passar ao próximo nível. Objetivo: manter o acerto mesmo com pouco destaque visual — controle pelo estímulo correto (o nome).</p>
+
+        <div class="row">
+          <div class="prog" aria-label="Progresso do nível"><span id="bar"></span></div>
+          <div id="placar" class="muted">Nível: 1/5 | Acertos no nível: 0/3 | Total: 0 acertos em 0 tentativas</div>
+        </div>
+
+        <div class="stack" style="margin:16px 0">
+          <div id="left" class="cardbox" role="button" aria-label="Opção esquerda">
+            <div class="label" id="leftLabel">NOME</div>
+            <div class="overlay" id="leftOverlay"></div>
+          </div>
+          <div id="right" class="cardbox" role="button" aria-label="Opção direita">
+            <div class="label" id="rightLabel">NOME</div>
+            <div class="overlay" id="rightOverlay"></div>
+          </div>
+        </div>
+
+        <div id="fb" class="feedback"></div>
+
+        <div class="center" style="gap:12px;margin-top:8px">
+          <button id="btn-voltar" class="btn btn-outline">⬅️ Voltar</button>
+          <button id="btn-nova" class="btn">🔄 Nova rodada</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // ===== Config =====
+    const ACERTOS_PARA_AVANCAR = 3;
+    const OPACIDADE = [0.90, 0.60, 0.35, 0.18, 0.00]; // do MAIS forte ao MAIS fraco
+
+    // ===== Estado =====
+    let nomeAlvo = '';
+    let nomeDistrator = '';
+    let nivel = 0; // 0..OPACIDADE.length-1
+    let acertosNoNivel = 0;
+    let totalAcertos = 0;
+    let totalTentativas = 0;
+    let rodadaPronta = false;
+
+    // ===== Util =====
+    function normalizar(s){
+      return (s||'').trim().toUpperCase().split(/\s+/).join(' ');
+    }
+    function trocarFinalVogal(nome){
+      if(!nome) return nome;
+      const mapa = {A:'O', O:'A', E:'I', I:'E', U:'O'};
+      const ult = nome.at(-1);
+      return nome.slice(0,-1) + (mapa[ult] || ult);
+    }
+    function trocarVogalInterna(nome){
+      const vogais = new Set('AEIOUÁÉÍÓÚÃÕ'.split(''));
+      const mapa = {A:'O',E:'I',I:'E',O:'A',U:'O',Á:'A',É:'E',Í:'I',Ó:'O',Ú:'U',Ã:'A',Õ:'O'};
+      const arr = [...nome];
+      for(let i=0;i<arr.length-1;i++){
+        const ch = arr[i];
+        if(vogais.has(ch)){ arr[i] = mapa[ch] || ch; break }
+      }
+      return arr.join('');
+    }
+    function permutarInternas(nome){
+      if(nome.length<=3) return nome;
+      const meio = [...nome.slice(1,-1)];
+      if(meio.length>=2){
+        const i = Math.floor(Math.random()*meio.length);
+        let j = Math.floor(Math.random()*meio.length);
+        if(j===i) j = (j+1)%meio.length;
+        [meio[i], meio[j]] = [meio[j], meio[i]];
+      }
+      return nome[0] + meio.join('') + nome.at(-1);
+    }
+    function gerarNomeParecido(base){
+      const b = normalizar(base);
+      if(!b) return 'NOME';
+      const cand = [trocarFinalVogal(b), trocarVogalInterna(b), permutarInternas(b)];
+      for(const c of cand){ if(c!==b) return c }
+      return b + 'S';
+    }
+
+    // ===== Elements =====
+    const secHome = document.getElementById('home');
+    const secAtiv = document.getElementById('atividade');
+    const inputNome = document.getElementById('nome');
+    const btnStart = document.getElementById('btn-start');
+    const preview = document.getElementById('preview');
+
+    const bar = document.getElementById('bar');
+    const placar = document.getElementById('placar');
+    const left = document.getElementById('left');
+    const right = document.getElementById('right');
+    const leftLabel = document.getElementById('leftLabel');
+    const rightLabel = document.getElementById('rightLabel');
+    const leftOverlay = document.getElementById('leftOverlay');
+    const rightOverlay = document.getElementById('rightOverlay');
+    const fb = document.getElementById('fb');
+    const btnVoltar = document.getElementById('btn-voltar');
+    const btnNova = document.getElementById('btn-nova');
+
+    function show(el){ el.classList.add('show') }
+    function hide(el){ el.classList.remove('show') }
+
+    function atualizarPlacar(){
+      const prog = acertosNoNivel / ACERTOS_PARA_AVANCAR;
+      bar.style.width = (prog*100)+'%';
+      placar.textContent = `Nível: ${nivel+1}/${OPACIDADE.length} | Acertos no nível: ${acertosNoNivel}/${ACERTOS_PARA_AVANCAR} | Total: ${totalAcertos} acertos em ${totalTentativas} tentativas`;
+    }
+
+    function estiloCartao(texto, destacado, alpha){
+      leftOverlay.style.opacity = 0; rightOverlay.style.opacity = 0;
+      leftLabel.textContent = texto.left;
+      rightLabel.textContent = texto.right;
+      if(destacado.left && alpha>0) leftOverlay.style.opacity = alpha;
+      if(destacado.right && alpha>0) rightOverlay.style.opacity = alpha;
+    }
+
+    function prepararRodada(){
+      const ladoAlvo = Math.random()<0.5 ? 'esq' : 'dir';
+      const alpha = OPACIDADE[Math.min(nivel, OPACIDADE.length-1)];
+      const textos = { left: '', right: '' };
+      const dest = { left:false, right:false };
+      if(ladoAlvo==='esq'){
+        textos.left = normalizar(nomeAlvo);
+        textos.right = normalizar(nomeDistrator);
+        dest.left = true; dest.right = false;
+        left.dataset.alvo = 'true'; right.dataset.alvo = 'false';
+      } else {
+        textos.right = normalizar(nomeAlvo);
+        textos.left = normalizar(nomeDistrator);
+        dest.right = true; dest.left = false;
+        right.dataset.alvo = 'true'; left.dataset.alvo = 'false';
+      }
+      estiloCartao(textos, dest, alpha);
+      rodadaPronta = true;
+      fb.className = 'feedback';
+      fb.innerHTML = '';
+      atualizarPlacar();
+    }
+
+    function venceuNivel(){ return acertosNoNivel >= ACERTOS_PARA_AVANCAR }
+    function terminouTudo(){ return nivel >= OPACIDADE.length-1 && venceuNivel() }
+
+    function darFeedback(ok){
+      const msg = ok ? '✅ Muito bem! Você reconheceu o seu nome.' : `✖ Ops! O nome correto era ${normalizar(nomeAlvo)}.`;
+      const cls = ok ? 'fbok' : 'fberr';
+      fb.className = 'feedback show';
+      fb.innerHTML = `<div class="fbx ${cls}">${msg}</div>`;
+    }
+
+    function cliqueCartao(isLeft){
+      if(!rodadaPronta) return;
+      rodadaPronta = false;
+      totalTentativas += 1;
+      const alvoNaqueleLado = (isLeft ? left.dataset.alvo : right.dataset.alvo) === 'true';
+      if(alvoNaqueleLado){
+        totalAcertos += 1; acertosNoNivel += 1; darFeedback(true);
+        if(terminouTudo()){
+          alert('🏆 Parabéns! Você manteve o acerto mesmo com pouco destaque (fading).');
+        } else if(venceuNivel()) {
+          nivel += 1; acertosNoNivel = 0;
+        }
+      } else {
+        darFeedback(false);
+      }
+      atualizarPlacar();
+    }
+
+    function novaRodada(){ prepararRodada() }
+
+    function iniciar(){
+      const val = (inputNome.value||'').trim();
+      if(!val){ alert('Digite seu nome para começar.'); return }
+      nomeAlvo = val;
+      nomeDistrator = gerarNomeParecido(val);
+      preview.textContent = `Alvo: ${nomeAlvo} | Parecido: ${nomeDistrator}`;
+
+      nivel = 0; acertosNoNivel = 0; totalAcertos = 0; totalTentativas = 0; rodadaPronta = false;
+      hide(secHome); show(secAtiv);
+      prepararRodada();
+    }
+
+    // Eventos
+    btnStart.addEventListener('click', iniciar);
+    inputNome.addEventListener('keydown', e=>{ if(e.key==='Enter') iniciar() });
+    left.addEventListener('click', ()=>cliqueCartao(true));
+    right.addEventListener('click', ()=>cliqueCartao(false));
+    btnNova.addEventListener('click', novaRodada);
+    btnVoltar.addEventListener('click', ()=>{ hide(secAtiv); show(secHome) });
+  </script>
+</body>
+</html>

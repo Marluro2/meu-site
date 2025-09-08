@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Keller (PSI) — Matemática DEMO (HTML)</title>
+  <style>
+    :root{--bg:#0b0b0c;--card:#111114;--muted:#2a2a2e;--text:#f6f6f7;--gold:#ffca28;--gold-100:#ffe8b6}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    .wrap{max-width:1080px;margin:0 auto;padding:24px}
+    .card{background:var(--card);border:1px solid #1f1f23;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,.35);padding:24px}
+    h1,h2{margin:0;color:var(--gold)}
+    .title{font-size:30px;font-weight:800}
+    .muted{color:#c7c7cc}
+    .row{display:flex;gap:12px;align-items:center;justify-content:space-between}
+    .col{display:flex;flex-direction:column;gap:12px}
+    .center{display:flex;align-items:center;justify-content:center}
+    .section{display:none}
+    .section.show{display:block}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:14px;border:1px solid transparent;cursor:pointer;font-weight:800;color:var(--gold);background:#1f2937;transition:.15s ease}
+    .btn:hover{transform:translateY(-1px);background:#243244}
+    .btn-outline{background:transparent;border-color:var(--gold)}
+    .btn[disabled]{opacity:.5;pointer-events:none}
+    .input{width:360px;max-width:100%;padding:12px 14px;border-radius:12px;border:1px solid #2b2b31;background:#0f1115;color:var(--gold);font-size:18px}
+    .list{display:flex;flex-direction:column;gap:10px}
+    .tile{display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid #23232a;border-radius:12px;background:#0f0f12}
+    .tile .t1{font-size:22px;font-weight:700;color:var(--gold)}
+    .tile .t2{font-size:16px;color:#c7c7cc}
+    .radios{display:flex;flex-direction:column;gap:10px;margin:8px 0}
+    .opt{display:flex;gap:10px;align-items:flex-start;background:#0e0f12;border:1px solid #24242a;border-radius:14px;padding:12px}
+    .opt input{margin-top:4px;transform:scale(1.2)}
+    .opt label{font-size:20px;line-height:1.35;cursor:pointer}
+    .enun{font-size:26px;font-weight:700;color:var(--gold)}
+    .input-ans{width:220px;max-width:100%;padding:12px 14px;border-radius:12px;border:1px solid #2b2b31;background:#0f1115;color:var(--gold);font-size:20px}
+    .prog{appearance:none;width:340px;max-width:100%;height:10px;border-radius:999px;background:#1f2937;overflow:hidden}
+    .prog>span{display:block;height:100%;background:var(--gold);width:0%}
+    .fb{min-height:20px;color:var(--gold-100)}
+    pre{white-space:pre-wrap;word-break:break-word}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <!-- HOME -->
+      <section id="home" class="section show">
+        <h1 class="title">PSI Keller — DEMO (3 itens por unidade)</h1>
+        <div class="col" style="margin-top:12px">
+          <input id="nome" class="input" placeholder="Seu nome" />
+          <button id="btn-entrar" class="btn">▶️ Entrar</button>
+        </div>
+      </section>
+
+      <!-- MENU -->
+      <section id="menu" class="section">
+        <h2 class="title">Unidades</h2>
+        <div id="saudacao" class="muted" style="margin:8px 0"></div>
+        <div id="lista" class="list"></div>
+        <div class="center" style="gap:12px;margin-top:12px">
+          <button id="btn-export" class="btn btn-outline">⬇️ Exportar CSV</button>
+          <button id="btn-voltar-app" class="btn btn-outline">⬅️ Voltar</button>
+        </div>
+      </section>
+
+      <!-- ROTEIRO -->
+      <section id="roteiro" class="section">
+        <div class="col">
+          <div id="tituloU" class="title"></div>
+          <div class="title" style="font-size:22px">Objetivo operacional</div>
+          <div id="objetivoU" class="muted" style="font-size:18px"></div>
+          <div class="title" style="font-size:22px">Roteiro de estudo</div>
+          <div id="roteiroU" class="muted" style="font-size:18px"></div>
+          <div class="center" style="gap:12px;margin-top:8px">
+            <button id="btn-iniciar" class="btn">✔️ Iniciar teste (3 itens)</button>
+            <button id="btn-voltar-menu1" class="btn btn-outline">🏠 Voltar ao menu</button>
+            <button id="btn-voltar1" class="btn btn-outline">⬅️ Voltar</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TESTE -->
+      <section id="teste" class="section">
+        <div id="enun" class="enun"></div>
+        <form id="radios" class="radios" style="display:none"></form>
+        <input id="entrada" class="input-ans" placeholder="Resposta" style="display:none" />
+        <div id="fb" class="fb"></div>
+        <div class="row">
+          <div class="prog" aria-label="Progresso"><span id="bar"></span></div>
+          <div id="placar" class="muted">Acertos: 0 / 0</div>
+        </div>
+        <div class="center" style="gap:10px;margin-top:8px">
+          <button id="btn-conf" class="btn">✔️ Confirmar</button>
+          <button id="btn-try" class="btn btn-outline" disabled>🔁 Tentar de novo</button>
+          <button id="btn-next" class="btn btn-outline" disabled>➡️ Próximo</button>
+          <button id="btn-voltar2" class="btn btn-outline">⬅️ Voltar</button>
+        </div>
+      </section>
+
+      <!-- RESULTADO -->
+      <section id="resultado" class="section">
+        <div id="resumo" class="enun" style="font-size:22px"></div>
+        <div class="center" style="gap:12px;margin-top:12px">
+          <button id="btn-restudy" class="btn btn-outline">📘 Reestudar unidade</button>
+          <button id="btn-retest" class="btn">🔁 Refazer teste</button>
+          <button id="btn-voltar-menu2" class="btn btn-outline">🏠 Voltar ao menu</button>
+          <button id="btn-voltar3" class="btn btn-outline">⬅️ Voltar</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // ===== Config =====
+    const NUM_ITENS_POR_TESTE = 3;
+
+    // ===== Estado =====
+    const aluno = { nome: '' };
+    const progresso = new Map(); // id -> {acertos,total,done}
+    const status = []; // 'open' | 'locked' | 'done'
+
+    let currentUnit = 0;
+    let itens = [];
+    let idx = 0;
+    let acertos = 0;
+    let respondeu = false;
+
+    // ===== Utils =====
+    const $ = (sel) => document.querySelector(sel);
+    const el = (tag, props={}) => Object.assign(document.createElement(tag), props);
+    const randi = (min,max)=> Math.floor(Math.random()*(max-min+1))+min;
+    const choice = (a)=> a[Math.floor(Math.random()*a.length)];
+    const gcd = (a,b)=>{ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b] } return a };
+    const fracIrredutivel = (n,d)=>{ const g=gcd(n,d); return `${n/g}/${d/g}` };
+    const parseNum = (s)=>{ if(s==null) return null; const v=String(s).trim().replace(',', '.'); const x=Number(v); return Number.isFinite(x)?x:null };
+
+    function baixarCSV(nomeArquivo, linhas){
+      const csv = linhas.map(l => l.map(v => `"${String(v).replaceAll('"','\"')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = el('a', { href:url, download:nomeArquivo });
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=> URL.revokeObjectURL(url), 3000);
+    }
+
+    // ===== Geradores de itens =====
+    function itens_equacoes(qtd=6){
+      const L=[]; for(let i=0;i<qtd;i++){
+        const a=randi(2,6), x=randi(2,9), b=randi(1,9), c=a*x+b;
+        const enun=`Resolva para x: ${a}x + ${b} = ${c}  →  x = ?`;
+        L.push({ tipo:'input', enunciado:enun, resposta_numerica:(c-b)/a, tolerancia:1e-6 });
+      } return L;
+    }
+    function itens_distributiva(qtd=6){
+      const L=[]; for(let i=0;i<qtd;i++){
+        const a=randi(2,9), b=randi(1,9), c=randi(1,9);
+        const enun=`Use a distributiva: ${a} x (${b} + ${c}) = ?`;
+        const resp=a*b + a*c;
+        const alternativas=[
+          `${a*b} + ${a*c} = ${resp}`,
+          `${a} + ${b} x ${c} = ${a + b*c}`,
+          `${a} x ${b} + ${c} = ${a*b + c}`,
+          `${a} x ${b + c} = ${a*(b+c)}`,
+        ];
+        for(let j=alternativas.length-1;j>0;j--){ const k=Math.floor(Math.random()*(j+1)); [alternativas[j],alternativas[k]]=[alternativas[k],alternativas[j]] }
+        L.push({ tipo:'radio', enunciado:enun, alternativas, correta: alternativas.indexOf(`${a*b} + ${a*c} = ${resp}`) });
+      } return L;
+    }
+    function itens_fracoes(qtd=6){
+      const L=[]; for(let i=0;i<qtd;i++){
+        const n=randi(2,9), d=randi(2,9), n2=randi(2,9), d2=randi(2,9);
+        const num=n*d2, den=d*n2; const s=fracIrredutivel(num,den); // (n/d)/(n2/d2)
+        const enun=`Simplifique: (${n}/${d}) / (${n2}/${d2})`;
+        L.push({ tipo:'input', enunciado:enun, resposta_texto:s });
+      } return L;
+    }
+    function itens_ordem_operacoes(qtd=6){
+      const L=[]; for(let i=0;i<qtd;i++){
+        const a=randi(2,9), b=randi(2,9), c=randi(2,9);
+        const enun=`Resolva: ${a} + ${b} / ${c} x ${a}`;
+        const valor = a + (b/c)*a;
+        L.push({ tipo:'input', enunciado:enun, resposta_numerica:valor, tolerancia:1e-6 });
+      } return L;
+    }
+
+    // ===== Unidades (PSI Keller DEMO) =====
+    const UNIDADES = [
+      { id:'U1', titulo:'Equações 1º grau — DEMO (3 itens)', objetivo:'Resolver ax + b = c matematicamente corretas (domínio: ≥ 85%).', roteiro:'Ex.: 2x + 3 = 11 → 2x = 8 → x = 4. Isolar o termo com x e dividir pelo coeficiente.', mastery:0.85, gerador: itens_equacoes },
+      { id:'U2', titulo:'Propriedade Distributiva — DEMO (3 itens)', objetivo:'Aplicar a(b+c)=ab+ac corretamente (domínio: ≥ 85%).', roteiro:'Ex.: 3 x (4 + 2) = 3 x 4 + 3 x 2 = 12 + 6 = 18.', mastery:0.85, gerador: itens_distributiva },
+      { id:'U3', titulo:'Frações / Ordem de operações — DEMO (3 itens)', objetivo:'Simplificar frações e resolver expressões com / e x antes de + e − (domínio: ≥ 85%).', roteiro:'Simplifique por MDC; em A + B / C x D, faça / e x antes, da esquerda para a direita.', mastery:0.85, gerador: (qtd)=> (Math.random()<0.5? itens_fracoes: itens_ordem_operacoes)(qtd) },
+    ];
+
+    // ===== Elements =====
+    const secHome = $('#home');
+    const secMenu = $('#menu');
+    const secRoteiro = $('#roteiro');
+    const secTeste = $('#teste');
+    const secResultado = $('#resultado');
+
+    const inputNome = $('#nome');
+    const btnEntrar = $('#btn-entrar');
+    const lista = $('#lista');
+    const saudacao = $('#saudacao');
+    const btnExport = $('#btn-export');
+    const btnVoltarApp = $('#btn-voltar-app');
+
+    const tituloU = $('#tituloU');
+    const objetivoU = $('#objetivoU');
+    const roteiroU = $('#roteiroU');
+    const btnIniciar = $('#btn-iniciar');
+    const btnVoltarMenu1 = $('#btn-voltar-menu1');
+    const btnVoltar1 = $('#btn-voltar1');
+
+    const enun = $('#enun');
+    const radios = $('#radios');
+    const entrada = $('#entrada');
+    const fb = $('#fb');
+    const bar = $('#bar');
+    const placar = $('#placar');
+    const btnConf = $('#btn-conf');
+    const btnTry = $('#btn-try');
+    const btnNext = $('#btn-next');
+    const btnVoltar2 = $('#btn-voltar2');
+
+    const resumo = $('#resumo');
+    const btnRestudy = $('#btn-restudy');
+    const btnRetest = $('#btn-retest');
+    const btnVoltarMenu2 = $('#btn-voltar-menu2');
+    const btnVoltar3 = $('#btn-voltar3');
+
+    // ===== Nav helpers =====
+    function show(section){ section.classList.add('show') }
+    function hide(section){ section.classList.remove('show') }
+    function go(section){ [secHome,secMenu,secRoteiro,secTeste,secResultado].forEach(hide); show(section) }
+
+    // ===== UI =====
+    function desenharMenu(){
+      lista.innerHTML = '';
+      UNIDADES.forEach((u,i)=>{
+        const estado = status[i];
+        const stText = estado==='locked' ? 'Bloqueada' : (estado==='done' ? 'Concluída' : 'Disponível');
+        const tile = el('div',{className:'tile'});
+        const t = el('div',{className:'t1', textContent:u.titulo});
+        const s = el('div',{className:'t2', textContent:`Objetivo: ${u.objetivo}  |  Status: ${stText}`});
+        const pile = el('div'); pile.appendChild(t); pile.appendChild(s);
+        tile.appendChild(pile);
+        if(estado !== 'locked'){
+          tile.style.cursor='pointer';
+          tile.addEventListener('click', ()=> abrirUnidade(i));
+        }
+        lista.appendChild(tile);
+      });
+    }
+
+    // ===== Fluxo =====
+    function abrirUnidade(i){
+      currentUnit = i;
+      const u = UNIDADES[i];
+      tituloU.textContent = u.titulo;
+      objetivoU.textContent = u.objetivo;
+      roteiroU.textContent = u.roteiro;
+      go(secRoteiro);
+    }
+
+    function iniciarTeste(){
+      const u = UNIDADES[currentUnit];
+      itens = u.gerador(NUM_ITENS_POR_TESTE);
+      idx = 0; acertos = 0; respondeu = false;
+      prepararItem();
+      go(secTeste);
+    }
+
+    function prepararItem(){
+      respondeu = false;
+      entrada.value=''; fb.textContent='';
+      const b = idx / NUM_ITENS_POR_TESTE; bar.style.width = (b*100)+'%';
+      placar.textContent = `Acertos: ${acertos} / ${idx}`;
+      const it = itens[idx];
+      enun.textContent = it.enunciado;
+
+      if(it.tipo==='radio'){
+        radios.style.display=''; entrada.style.display='none';
+        radios.innerHTML='';
+        it.alternativas.forEach((alt,i)=>{
+          const id = 'op-'+i;
+          const row = el('div',{className:'opt'});
+          const r = el('input',{type:'radio', name:'alt', id, value:String(i)});
+          const lab = el('label',{htmlFor:id, textContent:alt});
+          row.appendChild(r); row.appendChild(lab); radios.appendChild(row);
+        });
+      } else {
+        radios.style.display='none'; entrada.style.display='';
+      }
+
+      btnConf.disabled=false; btnNext.disabled=true; btnTry.disabled=true;
+    }
+
+    function confirmar(){
+      if(respondeu) return;
+      const it = itens[idx]; let ok=false;
+      if(it.tipo==='radio'){
+        const sel = radios.querySelector('input[name="alt"]:checked');
+        if(!sel){ alert('Selecione uma alternativa.'); return }
+        ok = Number(sel.value) === it.correta;
+      } else {
+        const val = entrada.value.trim();
+        if('resposta_numerica' in it){
+          const num = parseNum(val);
+          if(num!=null){ const tol = it.tolerancia ?? 1e-6; ok = Math.abs(num - Number(it.resposta_numerica)) <= tol }
+        } else if('resposta_texto' in it){
+          ok = (val === it.resposta_texto);
+        }
+      }
+      respondeu=true; btnConf.disabled=true; btnNext.disabled=false; btnTry.disabled = !ok ? false : true;
+      fb.textContent = ok ? '✅ Correto!' : '✖ Não foi dessa vez.';
+      if(ok) acertos += 1;
+      placar.textContent = `Acertos: ${acertos} / ${idx+1}`;
+    }
+
+    function tentarDeNovo(){
+      const it = itens[idx]; respondeu=false; fb.textContent=''; btnConf.disabled=false; btnNext.disabled=true; btnTry.disabled=true;
+      if(it.tipo==='radio'){ const sel = radios.querySelector('input[name="alt"]:checked'); if(sel) sel.checked=false } else { entrada.value='' }
+    }
+
+    function proximo(){
+      idx += 1; if(idx >= NUM_ITENS_POR_TESTE){ concluirTeste() } else { prepararItem() }
+    }
+
+    function concluirTeste(){
+      const u = UNIDADES[currentUnit];
+      const dominio = acertos / NUM_ITENS_POR_TESTE;
+      const exige = u.mastery;
+      const ok = dominio >= exige;
+      resumo.innerHTML = `<pre>Unidade: ${u.titulo}\nAcertos: ${acertos}/${NUM_ITENS_POR_TESTE}  →  domínio = ${(dominio*100).toFixed(0)}% (exigido: ${(exige*100).toFixed(0)}%)\n${ok ? 'PARABÉNS! Domínio alcançado.' : 'Ainda não alcançou o domínio.'}</pre>`;
+      progresso.set(u.id, { acertos, total: NUM_ITENS_POR_TESTE, done: ok });
+      if(ok && currentUnit+1 < UNIDADES.length && status[currentUnit+1] === 'locked') status[currentUnit+1] = 'open';
+      status[currentUnit] = ok ? 'done' : 'open';
+      go(secResultado);
+    }
+
+    function exportCSV(){
+      const linhas = [["aluno","unidade","acertos","total","domínio?"]];
+      UNIDADES.forEach(u=>{
+        const reg = progresso.get(u.id) || {acertos:0,total:0,done:false};
+        linhas.push([aluno.nome, u.titulo, reg.acertos, reg.total, reg.done? 'SIM':'NÃO']);
+      });
+      baixarCSV('relatorio_keller_demo.csv', linhas);
+    }
+
+    // ===== Event Bindings =====
+    btnEntrar.addEventListener('click', ()=>{
+      const nome = inputNome.value.trim();
+      if(!nome){ alert('Digite seu nome.'); return }
+      aluno.nome = nome; saudacao.textContent = `Bem-vindo(a), ${aluno.nome}!`;
+      status.length = 0; status.push('open', ...Array(UNIDADES.length-1).fill('locked'));
+      progresso.clear();
+      desenharMenu(); go(secMenu);
+    });
+
+    btnExport.addEventListener('click', exportCSV);
+    btnVoltarApp.addEventListener('click', ()=> go(secHome));
+
+    btnIniciar.addEventListener('click', iniciarTeste);
+    btnVoltarMenu1.addEventListener('click', ()=> { desenharMenu(); go(secMenu) });
+    btnVoltar1.addEventListener('click', ()=> go(secMenu));
+
+    btnConf.addEventListener('click', (e)=>{ e.preventDefault(); confirmar() });
+    btnTry.addEventListener('click', (e)=>{ e.preventDefault(); tentarDeNovo() });
+    btnNext.addEventListener('click', (e)=>{ e.preventDefault(); proximo() });
+    btnVoltar2.addEventListener('click', ()=> go(secRoteiro));
+
+    btnRestudy.addEventListener('click', ()=> go(secRoteiro));
+    btnRetest.addEventListener('click', iniciarTeste);
+    btnVoltarMenu2.addEventListener('click', ()=> { desenharMenu(); go(secMenu) });
+    btnVoltar3.addEventListener('click', ()=> go(secMenu));
+  </script>
+</body>
+</html>

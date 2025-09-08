@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz – Estímulo Discriminativo</title>
+  <style>
+    :root{
+      --bg:#0b0b0c;--card:#111114;--muted:#2a2a2e;--text:#f6f6f7;--gold:#ffca28;--gold-900:#7a5b00;
+      --ok-bg:#c8f7c5;--ok-fg:#0a4d0a;--warn-bg:#ffe8b6;--warn-fg:#7a4b00
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:980px;margin:0 auto;padding:24px}
+    .card{background:var(--card);border:1px solid #1f1f23;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,.35);padding:24px}
+    h1{margin:0;color:var(--gold);font-weight:800;font-size:28px}
+    .row{display:flex;gap:12px;align-items:center;justify-content:space-between}
+    .gold{color:var(--gold)}
+    .prog{appearance:none;width:100%;height:10px;border-radius:999px;background:#1f2937;overflow:hidden}
+    .prog>span{display:block;height:100%;background:var(--gold);width:0%}
+    .enun{font-size:26px;font-weight:700;color:var(--gold);margin:10px 0}
+    .title-q{font-size:30px;font-weight:700;color:var(--gold);margin-top:6px}
+    .radios{display:flex;flex-direction:column;gap:10px;margin:8px 0}
+    .opt{display:flex;gap:10px;align-items:flex-start;background:#0e0f12;border:1px solid #24242a;border-radius:14px;padding:12px}
+    .opt input{margin-top:4px;transform:scale(1.2)}
+    .opt label{font-size:20px;line-height:1.35;cursor:pointer}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:16px 28px;border-radius:16px;border:1px solid transparent;cursor:pointer;font-weight:800;color:var(--gold);background:#1f2937;transition:.15s ease}
+    .btn:hover{transform:translateY(-1px);background:#243244}
+    .btn:active{transform:translateY(0) scale(.99)}
+    .btn-outline{background:transparent;border-color:var(--gold)}
+    .btn[disabled]{opacity:.5;pointer-events:none}
+    .stack{display:flex;gap:12px;justify-content:center}
+    .score{font-size:18px;color:var(--gold)}
+    .feedback{display:none;margin-top:6px}
+    .feedback.show{display:block}
+    .ok{background:var(--ok-bg);color:var(--ok-fg)}
+    .warn{background:var(--warn-bg);color:var(--warn-fg)}
+    .fbx{border-radius:12px;padding:14px}
+    dialog{border:none;border-radius:16px;padding:0;background:#0f0f12;color:var(--text);width:min(92vw,540px)}
+    dialog::backdrop{background:rgba(0,0,0,.75)}
+    .dlg{padding:20px}
+    .dlg h2{margin:0 0 6px 0;color:var(--gold)}
+    .dlg .actions{display:flex;justify-content:flex-end;gap:12px;margin-top:12px}
+    .topbar{display:flex;gap:12px;align-items:center;justify-content:space-between}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="topbar">
+        <button class="btn btn-outline" id="btn-voltar">⬅️ Voltar</button>
+        <h1>Quiz – Estímulo Discriminativo</h1>
+      </div>
+
+      <div class="row" style="margin-top:10px">
+        <div class="prog" aria-label="Progresso"><span id="bar"></span></div>
+        <div id="placar" class="score">Score: 0/0</div>
+      </div>
+
+      <div id="tituloQ" class="title-q"></div>
+      <div id="enun" class="enun"></div>
+
+      <form id="formOps" class="radios" role="radiogroup" aria-label="Alternativas"></form>
+
+      <div id="fb" class="feedback"></div>
+
+      <div class="stack" style="margin-top:8px">
+        <button id="btn-confirmar" class="btn">✔️ Confirmar</button>
+        <button id="btn-proxima" class="btn btn-outline" disabled>➡️ Próxima</button>
+      </div>
+    </div>
+  </div>
+
+  <dialog id="dlg">
+    <div class="dlg">
+      <h2>Resultado</h2>
+      <div id="dlg-body" style="font-size:18px"></div>
+      <div class="actions">
+        <button id="dlg-fechar" class="btn">Fechar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    // ===== Dados =====
+    const QUESTOES = [
+      {
+        id: 1,
+        titulo: "Exercício 1 – Estímulo Discriminativo (Sala de Aula)",
+        enunciado: "O professor escreve no quadro: 'Atividade valendo nota'. Os alunos passam a resolver as questões com maior dedicação. Qual é o estímulo discriminativo (Eᴰ) dessa situação?",
+        alternativas: {
+          A: "A atividade em si",
+          B: "O aluno se concentrar na tarefa",
+          C: "A frase 'Atividade valendo nota' no quadro",
+          D: "A nota recebida pelo aluno",
+        },
+        correta: "C",
+        justificativa: "O Eᴰ é a frase no quadro que sinaliza que, se o aluno responder, receberá reforço (nota).",
+      },
+      {
+        id: 2,
+        titulo: "Exercício 2 – Estímulo Discriminativo (Trânsito)",
+        enunciado: "Um pedestre espera para atravessar a rua. O semáforo muda para o sinal verde para pedestres e ele atravessa com segurança. Qual é o estímulo discriminativo (Eᴰ)?",
+        alternativas: {
+          A: "O ato de atravessar a rua",
+          B: "O reforço de atravessar com segurança",
+          C: "O motorista que parou o carro",
+          D: "O sinal verde para pedestres",
+        },
+        correta: "D",
+        justificativa: "O sinal verde é o Eᴰ, pois indica que atravessar nesse momento resultará em segurança e fluidez (reforço natural).",
+      },
+      {
+        id: 3,
+        titulo: "Exercício 3 – Estímulo Discriminativo (Esporte)",
+        enunciado: "Em uma partida de futebol, o árbitro apita autorizando a cobrança do pênalti. O jogador chuta a bola em direção ao gol. Qual é o estímulo discriminativo (Eᴰ)?",
+        alternativas: {
+          A: "O chute do jogador",
+          B: "O gol marcado",
+          C: "A torcida gritando",
+          D: "O apito do árbitro autorizando a cobrança",
+        },
+        correta: "D",
+        justificativa: "O apito do árbitro funciona como Eᴰ, pois sinaliza que o chute pode ser realizado e que terá consequência válida dentro das regras.",
+      },
+    ];
+
+    const MOTIVACIONAIS = [
+      "Muito bem! Você reconheceu o estímulo que controla o comportamento.",
+      "Ótimo! Identificar o Eᴰ é essencial para entender o aprendizado.",
+      "Parabéns! Você está compreendendo o controle por estímulos.",
+    ];
+
+    const NAO_DESISTA = [
+      "Não desanime! O estímulo discriminativo é apenas a pista, não o comportamento.",
+      "Quase! Lembre-se: Eᴰ é o que sinaliza a chance de reforço.",
+      "Siga tentando! Identificar o Eᴰ ajuda a prever o comportamento.",
+    ];
+
+    // ===== Estado =====
+    let idxAtual = 0;
+    let pontuacao = 0;
+    let respondeu = false;
+
+    // ===== Elementos =====
+    const bar = document.getElementById('bar');
+    const placar = document.getElementById('placar');
+    const tituloQ = document.getElementById('tituloQ');
+    const enun = document.getElementById('enun');
+    const formOps = document.getElementById('formOps');
+    const fb = document.getElementById('fb');
+    const btnConfirmar = document.getElementById('btn-confirmar');
+    const btnProxima = document.getElementById('btn-proxima');
+    const btnVoltar = document.getElementById('btn-voltar');
+
+    const dlg = document.getElementById('dlg');
+    const dlgBody = document.getElementById('dlg-body');
+    const dlgFechar = document.getElementById('dlg-fechar');
+
+    // ===== Funções =====
+    function renderQuestao(i){
+      respondeu = false;
+      const q = QUESTOES[i];
+      tituloQ.textContent = q.titulo;
+      enun.textContent = q.enunciado;
+      formOps.innerHTML = '';
+
+      // criar radios
+      for(const letra of Object.keys(q.alternativas)){
+        const texto = q.alternativas[letra];
+        const id = `op-${letra}`;
+        const w = document.createElement('div');
+        w.className = 'opt';
+        const r = document.createElement('input');
+        r.type = 'radio'; r.name = 'alt'; r.value = letra; r.id = id;
+        const lbl = document.createElement('label');
+        lbl.htmlFor = id; lbl.textContent = `${letra}) ${texto}`;
+        w.appendChild(r); w.appendChild(lbl);
+        formOps.appendChild(w);
+      }
+
+      fb.className = 'feedback';
+      btnConfirmar.disabled = false;
+      btnProxima.disabled = true;
+
+      const pct = (i / QUESTOES.length) * 100;
+      bar.style.width = pct + '%';
+      placar.textContent = `Score: ${pontuacao}/${i}`;
+    }
+
+    function getSelecionada(){
+      const el = formOps.querySelector('input[name="alt"]:checked');
+      return el ? el.value : null;
+    }
+
+    function confirmar(e){
+      e.preventDefault();
+      const val = getSelecionada();
+      if(!val){ alert('Selecione uma alternativa.'); return }
+      if(respondeu) return;
+      respondeu = true;
+
+      const q = QUESTOES[idxAtual];
+      const acertou = (val === q.correta);
+
+      let html = '';
+      if(acertou){
+        pontuacao += 1;
+        const msg = MOTIVACIONAIS[Math.floor(Math.random()*MOTIVACIONAIS.length)];
+        html = `<div class="fbx ok"><div style="font-size:28px;font-weight:800">✓ Resposta correta!</div><div style="font-size:20px">${msg}</div></div>`;
+      } else {
+        const msg = NAO_DESISTA[Math.floor(Math.random()*NAO_DESISTA.length)];
+        const letra = q.correta;
+        const textoCorreto = q.alternativas[letra];
+        html = `<div class="fbx warn"><div style="font-size:20px;font-weight:800">✗ Não foi dessa vez</div><div style="font-size:20px">${msg}</div><div style="font-size:20px">Correta: ${letra}) ${textoCorreto}</div><div style="font-size:20px">Justificativa: ${q.justificativa}</div></div>`;
+      }
+
+      fb.innerHTML = html;
+      fb.className = 'feedback show';
+      btnConfirmar.disabled = true;
+      btnProxima.disabled = false;
+      placar.textContent = `Score: ${pontuacao}/${idxAtual+1}`;
+    }
+
+    function proxima(){
+      if(idxAtual < QUESTOES.length - 1){
+        idxAtual += 1;
+        renderQuestao(idxAtual);
+      } else {
+        finalizar();
+      }
+    }
+
+    function finalizar(){
+      const total = QUESTOES.length;
+      const pct = Math.round((pontuacao/total)*100);
+      const msgFinal = pct >= 80 ? 'Excelente desempenho!' : (pct >= 60 ? 'Muito bom! Continue praticando.' : 'Bom começo! Persistência gera progresso.');
+      dlgBody.innerHTML = `<p style="margin:.3rem 0">Acertos: <b>${pontuacao}</b> de <b>${total}</b> (<b>${pct}%</b>)</p><p style="margin:.3rem 0">${msgFinal}</p>`;
+      dlg.showModal();
+    }
+
+    // ===== Eventos =====
+    btnConfirmar.addEventListener('click', confirmar);
+    btnProxima.addEventListener('click', proxima);
+    btnVoltar.addEventListener('click', () => history.length > 1 ? history.back() : window.location.assign('./'));
+    dlgFechar.addEventListener('click', () => dlg.close());
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') dlg.close() });
+
+    // start
+    renderQuestao(idxAtual);
+  </script>
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Instrução Programada — Matemática (HTML)</title>
+  <style>
+    :root{
+      --bg:#0b0b0c;--card:#111114;--muted:#2a2a2e;--text:#f6f6f7;--gold:#ffca28;--gold-100:#ffe8b6
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    .wrap{max-width:1080px;margin:0 auto;padding:24px}
+    .card{background:var(--card);border:1px solid #1f1f23;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,.35);padding:24px}
+    h1{margin:0 0 8px 0;color:var(--gold);font-weight:800;font-size:28px}
+    .muted{color:#c7c7cc}
+    .row{display:flex;gap:12px;align-items:center;justify-content:space-between}
+    .col{display:flex;flex-direction:column;gap:12px}
+    .enun{font-size:26px;font-weight:700;color:var(--gold)}
+    .title{font-size:30px;font-weight:800;color:var(--gold)}
+    .prog{appearance:none;width:560px;max-width:100%;height:10px;border-radius:999px;background:#1f2937;overflow:hidden}
+    .prog>span{display:block;height:100%;background:var(--gold);width:0%}
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:14px;border:1px solid transparent;cursor:pointer;font-weight:800;color:var(--gold);background:#1f2937;transition:.15s ease}
+    .btn:hover{transform:translateY(-1px);background:#243244}
+    .btn-outline{background:transparent;border-color:var(--gold)}
+    .btn[disabled]{opacity:.5;pointer-events:none}
+    .radios{display:flex;flex-direction:column;gap:10px;margin:8px 0}
+    .opt{display:flex;gap:10px;align-items:flex-start;background:#0e0f12;border:1px solid #24242a;border-radius:14px;padding:12px}
+    .opt input{margin-top:4px;transform:scale(1.2)}
+    .opt label{font-size:22px;line-height:1.35;cursor:pointer}
+    .input{width:420px;max-width:100%;padding:12px 14px;border-radius:12px;border:1px solid #2b2b31;background:#0f1115;color:var(--gold);font-size:22px}
+    .fb{display:none;margin-top:6px}
+    .fb.show{display:block}
+    .fbx{border-radius:12px;padding:12px}
+    .ok{background:#c8f7c5;color:#0a4d0a}
+    .warn{background:#ffe8b6;color:#7a4b00}
+    dialog{border:none;border-radius:16px;padding:0;background:#0f0f12;color:var(--text);width:min(92vw,540px)}
+    dialog::backdrop{background:rgba(0,0,0,.75)}
+    .dlg{padding:20px}
+    .dlg h2{margin:0 0 6px 0;color:var(--gold)}
+    .dlg .actions{display:flex;justify-content:flex-end;gap:12px;margin-top:12px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Instrução Programada — Matemática (ajustada)</h1>
+      <p class="muted">IP: pequenas etapas + resposta ativa + feedback imediato + ritmo próprio + teste do programa.</p>
+
+      <div class="col">
+        <div id="titulo" class="title"></div>
+        <div id="enun" class="enun"></div>
+
+        <form id="radios" class="radios" role="radiogroup" aria-label="Alternativas" style="display:none"></form>
+        <input id="entrada" class="input" placeholder="Digite a resposta e confirme" />
+
+        <div id="fb" class="fb"></div>
+
+        <div class="row">
+          <div class="prog" aria-label="Progresso"><span id="bar"></span></div>
+          <div id="placar" class="muted">Acertos: 0/0</div>
+        </div>
+
+        <div class="row" style="justify-content:center;gap:10px">
+          <button id="btn-voltar" class="btn btn-outline" disabled>⬅️ Voltar</button>
+          <button id="btn-confirmar" class="btn">✔️ Confirmar</button>
+          <button id="btn-tentar" class="btn btn-outline" disabled>🔁 Tentar de novo</button>
+          <button id="btn-proximo" class="btn btn-outline" disabled>➡️ Próximo</button>
+          <button id="btn-reiniciar" class="btn btn-outline">↻ Reiniciar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <dialog id="dlg">
+    <div class="dlg">
+      <h2>Resultado</h2>
+      <div id="dlg-body"></div>
+      <div class="actions">
+        <button id="dlg-fechar" class="btn">Fechar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    // ========= Utils =========
+    function normText(s){
+      if(!s) return '';
+      const d = s.normalize('NFD').replace(/\p{Mn}+/gu,'');
+      return d.trim().toUpperCase();
+    }
+    function parseNum(s){
+      if(s==null) return null; const v = String(s).trim().replace(',', '.');
+      const x = Number(v); return Number.isFinite(x) ? x : null;
+    }
+    function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){[a,b]=[b,a%b]} return a }
+    function fracSimplify(n,d){ const g=gcd(n,d); return [n/g|0, d/g|0] }
+    function randi(min,max){ return Math.floor(Math.random()*(max-min+1))+min }
+    function choice(arr){ return arr[Math.floor(Math.random()*arr.length)] }
+
+    // ========= Frames dinâmicos =========
+    function buildFrames(){
+      // Eq.1: a x + b = c
+      const a1 = randi(2,5);
+      const x1 = randi(2,9);
+      const b1 = randi(1,8);
+      const c1 = a1*x1 + b1;
+
+      // Eq.2: k (x - d) = m
+      const k2 = randi(2,5);
+      const x2 = randi(2,9);
+      const d2 = randi(1,5);
+      const m2 = k2 * (x2 - d2);
+
+      // Distributiva p(q+r)
+      const p = randi(2,5), q = randi(2,6), r = randi(2,6);
+
+      // Fração irredutível
+      let num = choice([6,8,9,10,12,15,16,18]);
+      let den = choice([8,10,12,15,18,20,24]);
+      while(gcd(num,den)===1){ num = randi(6,18); den = randi(8,24) }
+      const [sn, sd] = fracSimplify(num,den);
+      const decimal_ok = Number((sn/sd).toFixed(4));
+
+      // PEMDAS: A + B/C * D
+      const A = randi(2,6), B = randi(6,12), C = randi(2,4), D = randi(2,4);
+      const pemdas_val = A + (B/C)*D;
+
+      const frames = [
+        { id:"M1", titulo:"Etapa 1 — Operação preparatória", tipo:"input",
+          enunciado:`Para isolar x em ${a1}x + ${b1} = ${c1}, começamos removendo o ${b1}. Calcule ${c1} − ${b1}.`,
+          resposta_numerica: c1 - b1, tolerancia: 1e-6,
+          explicacao:`Certo: ${c1} − ${b1} = ${c1-b1}. Assim obtemos ${a1}x = ${c1-b1}.` },
+        { id:"M2", titulo:"Etapa 2 — Igualdade após subtrair", tipo:"mc",
+          enunciado:`Depois de subtrair ${b1} dos dois lados em ${a1}x + ${b1} = ${c1}, obtemos:`,
+          alternativas:[ `${a1}x = ${c1-b1}`, `${a1}x = ${c1+b1}`, `x + ${b1} = ${c1-b1}`, `${a1}x = ${c1} − ${b1} (sem resolver)` ],
+          correta:0, explicacao:`Subtraindo ${b1} de ambos os lados: ${a1}x = ${c1-b1}.` },
+        { id:"M3", titulo:"Etapa 3 — Isolando x", tipo:"input",
+          enunciado:`Se ${a1}x = ${c1-b1}, então x = ?`, resposta_numerica:x1, tolerancia:1e-6,
+          explicacao:`Divida ambos os lados por ${a1}: x = ${(c1-b1)}/${a1} = ${x1}.` },
+        { id:"M4", titulo:"Etapa 4 — Verificação", tipo:"mc",
+          enunciado:`Verifique: ${a1}·${x1} + ${b1} = ${c1} ?`, alternativas:["Sim","Não"], correta:0,
+          explicacao:`${a1}·${x1} + ${b1} = ${a1*x1} + ${b1} = ${c1}. Confere.` },
+
+        { id:"M5", titulo:"Etapa 5 — Dividir ambos os lados", tipo:"input",
+          enunciado:`Em ${k2}(x − ${d2}) = ${m2}, divida ambos os lados por ${k2}. Então x − ${d2} = ?`,
+          resposta_numerica: m2/k2, tolerancia:1e-6,
+          explicacao:`${m2} ÷ ${k2} = ${(m2%k2===0)?(m2/k2):(m2/k2)}. Logo x − ${d2} = ${m2/k2}.` },
+        { id:"M6", titulo:"Etapa 6 — Isolando x", tipo:"input",
+          enunciado:`Se x − ${d2} = ${m2/k2}, então x = ?`, resposta_numerica:x2, tolerancia:1e-6,
+          explicacao:`Somar ${d2} nos dois lados: x = ${m2/k2} + ${d2} = ${x2}.` },
+        { id:"M7", titulo:"Etapa 7 — Verificação", tipo:"mc",
+          enunciado:`Verifique: ${k2}(${x2} − ${d2}) = ${m2} ?`, alternativas:["Sim","Não"], correta:0,
+          explicacao:`${x2} − ${d2} = ${x2-d2}; ${k2}·${x2-d2} = ${m2}. Correto.` },
+
+        { id:"M8", titulo:"Etapa 8 — Propriedade distributiva", tipo:"input",
+          enunciado:`Use a distributiva: ${p}(${q} + ${r}) = ?`, resposta_numerica: p*(q+r), tolerancia:1e-6,
+          explicacao:`${p}·${q} + ${p}·${r} = ${p*q} + ${p*r} = ${p*(q+r)}.` },
+        { id:"M9", titulo:"Etapa 9 — Fração irredutível", tipo:"input",
+          enunciado:`Escreva ${num}/${den} na forma irredutível (ex.: '3/4' ou '${decimal_ok}'. Use vírgula ou ponto).`,
+          respostas_ok: new Set([ `${sn}/${sd}`, `${sn} / ${sd}`, `${decimal_ok}`, String(decimal_ok).replace('.', ',') ]),
+          explicacao:`${num}/${den} simplifica para ${sn}/${sd} (= ${decimal_ok}).` },
+        { id:"M10", titulo:"Etapa 10 — Ordem de operações (PEMDAS)", tipo:"input",
+          enunciado:`Calcule: ${A} + ${B} ÷ ${C} × ${D} = ?  (divisão e multiplicação antes, da esquerda para a direita)`,
+          resposta_numerica: pemdas_val, tolerancia:1e-6,
+          explicacao:`${B}÷${C}=${B/C}; ${(B/C)}×${D}=${(B/C)*D}; ${A}+${(B/C)*D}=${pemdas_val}.` },
+      ];
+      return frames;
+    }
+
+    // ========= Estado =========
+    let FRAMES = buildFrames();
+    let idx = 0;
+    let acertos = 0;
+    let respondeu = false;
+
+    // ========= Elementos =========
+    const titulo = document.getElementById('titulo');
+    const enun = document.getElementById('enun');
+    const radios = document.getElementById('radios');
+    const entrada = document.getElementById('entrada');
+    const fb = document.getElementById('fb');
+    const bar = document.getElementById('bar');
+    const placar = document.getElementById('placar');
+    const btnVoltar = document.getElementById('btn-voltar');
+    const btnConfirmar = document.getElementById('btn-confirmar');
+    const btnTentar = document.getElementById('btn-tentar');
+    const btnProximo = document.getElementById('btn-proximo');
+    const btnReiniciar = document.getElementById('btn-reiniciar');
+
+    const dlg = document.getElementById('dlg');
+    const dlgBody = document.getElementById('dlg-body');
+    const dlgFechar = document.getElementById('dlg-fechar');
+
+    // ========= Render =========
+    function montarMC(f){
+      radios.style.display = '';
+      entrada.style.display = 'none';
+      radios.innerHTML = '';
+      const order = [...f.alternativas].map((t,i)=>({i,t}));
+      for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]]}
+      for(const {i:orig, t} of order){
+        const id = 'op-'+orig;
+        const row = document.createElement('div'); row.className='opt';
+        const r = document.createElement('input'); r.type='radio'; r.name='alt'; r.value=String(orig); r.id=id;
+        const lab = document.createElement('label'); lab.htmlFor=id; lab.textContent=t;
+        row.appendChild(r); row.appendChild(lab); radios.appendChild(row);
+      }
+    }
+    function montarInput(f){
+      radios.style.display = 'none';
+      entrada.style.display = '';
+      entrada.value = '';
+      entrada.placeholder = 'Digite a resposta e confirme';
+      setTimeout(()=>entrada.focus(), 0);
+    }
+    function mostrarFrame(i){
+      respondeu = false;
+      const f = FRAMES[i];
+      titulo.textContent = f.titulo || `Etapa ${i+1}`;
+      enun.textContent = f.enunciado;
+      fb.className = 'fb'; fb.innerHTML = '';
+      btnConfirmar.disabled = false; btnProximo.disabled = true; btnTentar.disabled = true;
+      btnVoltar.disabled = (i===0);
+      const pct = (i/FRAMES.length)*100; bar.style.width = pct+'%';
+      placar.textContent = `Acertos: ${acertos}/${i}`;
+      if(f.tipo === 'mc') montarMC(f); else montarInput(f);
+    }
+
+    function feedback(ok,msg){
+      const cls = ok ? 'ok' : 'warn';
+      fb.className = 'fb show';
+      fb.innerHTML = `<div class="fbx ${cls}"><div style="font-size:20px;font-weight:800">${ok?'✓ Resposta correta!':'✗ Não foi dessa vez'}</div><div style="font-size:18px">${msg}</div></div>`;
+    }
+
+    // ========= Ações =========
+    function confirmar(){
+      if(respondeu) return;
+      const f = FRAMES[idx];
+      let ok = false;
+      if(f.tipo === 'mc'){
+        const sel = radios.querySelector('input[name="alt"]:checked');
+        if(!sel){ alert('Selecione uma alternativa.'); return }
+        ok = (Number(sel.value) === f.correta);
+      } else {
+        if('resposta_numerica' in f){
+          const num = parseNum(entrada.value);
+          if(num!=null){ const tol = f.tolerancia ?? 1e-6; ok = Math.abs(num - Number(f.resposta_numerica)) <= tol }
+        } else if(f.respostas_ok){
+          ok = f.respostas_ok.has(normText(entrada.value)) || f.respostas_ok.has(String(entrada.value).trim());
+        }
+      }
+      respondeu = true;
+      btnConfirmar.disabled = true; btnProximo.disabled = false; btnTentar.disabled = ok; // tentar de novo só quando errar
+      if(ok){ acertos += 1; feedback(true, f.explicacao || 'Muito bem!') }
+      else { feedback(false, f.explicacao || 'Releia e tente novamente.') }
+      placar.textContent = `Acertos: ${acertos}/${idx+1}`;
+    }
+
+    function proximo(){
+      if(idx < FRAMES.length-1){ idx += 1; mostrarFrame(idx) }
+      else { finalizar() }
+    }
+
+    function tentar(){ mostrarFrame(idx) }
+    function voltar(){ if(idx>0){ idx -= 1; mostrarFrame(idx) } }
+
+    function reiniciar(){ FRAMES = buildFrames(); idx = 0; acertos = 0; respondeu = false; mostrarFrame(idx) }
+
+    function finalizar(){
+      const total = FRAMES.length; const pct = Math.round((acertos/total)*100);
+      document.getElementById('dlg-body').innerHTML = `Desempenho: <b>${acertos}</b>/${total} (<b>${pct}%</b>)`;
+      bar.style.width = '100%';
+      document.getElementById('dlg').showModal();
+    }
+
+    // ========= Eventos =========
+    document.getElementById('btn-confirmar').addEventListener('click', e=>{ e.preventDefault(); confirmar() });
+    document.getElementById('btn-proximo').addEventListener('click', e=>{ e.preventDefault(); proximo() });
+    document.getElementById('btn-tentar').addEventListener('click', e=>{ e.preventDefault(); tentar() });
+    document.getElementById('btn-voltar').addEventListener('click', e=>{ e.preventDefault(); voltar() });
+    document.getElementById('btn-reiniciar').addEventListener('click', e=>{ e.preventDefault(); reiniciar() });
+
+    document.getElementById('dlg-fechar').addEventListener('click', ()=> document.getElementById('dlg').close());
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') document.getElementById('dlg').close() });
+
+    // start
+    mostrarFrame(idx);
+  </script>
+</body>
+</html>
