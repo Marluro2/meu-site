@@ -21,27 +21,33 @@
     /* Header & nav */
     header{border-bottom:1px solid var(--line);background:var(--card)}
     .container{max-width:1100px;margin:0 auto;padding:16px}
-    .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .topbar{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
 
     /* Centralizar ícone e título */
     .brand {
       display:flex;
       align-items:center;
-      justify-content:center; /* centraliza horizontalmente */
+      justify-content:center;
       width:100%;
       text-decoration:none;
     }
 
-    /* Título maior e azul */
+    /* Título maior e dourado */
     .brand h2 {
-      font-size:32px;     /* tamanho maior */
-      color:#007bff;      /* azul */
+      font-size:32px;
+      color: var(--gold);   /* dourado igual ao "Bem-vindo(a)" */
       margin:0;
       font-weight:900;
     }
 
-    /* Nav actions (buttons) */
-    .nav-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    /* Nav actions (buttons) centralizados */
+    .nav-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:center; /* centraliza os botões */
+      flex-wrap:wrap;
+    }
     .nav-actions .btn-nav{
       display:inline-flex;align-items:center;gap:8px;
       padding:10px 14px;border-radius:999px;
