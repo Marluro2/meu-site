@@ -87,8 +87,8 @@
     .msg{padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:#151517;color:var(--sub);margin:0 16px 36px}
   
     /* === Sidebar (15 botões à esquerda) === */
-    .page{display:grid;grid-template-columns:220px 1fr;gap:24px}
-    .sidebar{align-self:start; position: sticky; top: 16px;}
+    .page{display:grid;grid-template-columns:220px 1fr;gap:24px;width:100%;margin:0}
+    .sidebar{align-self:start;position:sticky;top:16px;margin-left:0}
     .side-menu{display:flex;flex-direction:column;gap:10px}
     .side-btn{
       display:block;
@@ -128,10 +128,10 @@
   </header>
 
   <main>
-<div class="container page">
+<div class="page">
       <aside class="sidebar" aria-label="Navegação lateral">
         <nav class="side-menu">
-          <a class="side-btn" href="#">1) Teroria Behavioristas antigas</a>
+          <a class="side-btn" href="FICHAMENTO-%20%20Teorias%20cognitivas%20%20antigas.pdf" target="_blank" rel="noopener">1) Teroria Behavioristas antigas</a>
           <a class="side-btn" href="#">2) Teorias Cognitivas antigas</a>
           <a class="side-btn" href="#">3) A teoria behaviorista de Skiner</a>
           <a class="side-btn" href="#">4) A teoria de Gagné</a>
