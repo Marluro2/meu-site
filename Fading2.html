@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FADING — SKINNER (Discriminação Estímulo-Resposta)</title>
+  <style>
+    :root{
+      --bg:#0b0b0c;--card:#111114;--muted:#2a2a2e;--text:#f6f6f7;--gold:#ffca28;--ok:#a7f3d0;--ok-fg:#064e3b;--err:#fecaca;--err-fg:#7f1d1d;
+      --accent:#60a5fa
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    .wrap{max-width:1200px;margin:0 auto;padding:24px}
+    .card{background:var(--card);border:1px solid #1f1f23;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,.35);padding:24px}
+    h1{margin:0 0 6px 0;font-weight:800;color:var(--gold)}
+    .muted{color:#c7c7cc}
+    .row{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .col{display:flex;flex-direction:column;gap:14px}
+    .center{display:flex;align-items:center;justify-content:center}
+    .controls{display:flex;gap:12px;flex-wrap:wrap}
+
+    .input, select{
+      width:320px;max-width:100%;padding:12px 14px;border-radius:14px;border:1px solid #2b2b31;background:#0f1115;color:var(--gold);font-size:16px
+    }
+    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;border:1px solid transparent;cursor:pointer;font-weight:800;color:var(--gold);background:#1f2937;transition:.15s ease}
+    .btn:hover{transform:translateY(-1px);background:#243244}
+    .btn-outline{background:transparent;border-color:var(--gold)}
+    .btn[disabled]{opacity:.5;pointer-events:none}
+
+    .prog{appearance:none;width:460px;max-width:100%;height:10px;border-radius:999px;background:#1f2937;overflow:hidden}
+    .prog>span{display:block;height:100%;background:var(--gold);width:0%}
+
+    .stack{display:flex;gap:40px;align-items:center;justify-content:center;flex-wrap:wrap}
+    .cardbox{width:340px;height:200px;border-radius:14px;background:#111827;display:grid;place-items:center;position:relative;border:1px solid #222;padding:10px;text-align:center}
+    .cardbox .label{font-size:34px;font-weight:900;color:var(--gold);line-height:1.1}
+    .overlay{position:absolute;inset:0;border-radius:14px;background:linear-gradient(135deg, rgba(96,165,250,.85), rgba(255,202,40,.85));opacity:0;pointer-events:none}
+
+    .feedback{display:none}
+    .feedback.show{display:block}
+    .fbok{background:var(--ok);color:var(--ok-fg)}
+    .fberr{background:var(--err);color:var(--err-fg)}
+    .fbx{border-radius:12px;padding:12px;margin-top:8px}
+
+    .badge{display:inline-flex;align-items:center;gap:8px;background:#0f172a;border:1px solid #1f2937;color:#c7c7cc;border-radius:999px;padding:6px 12px;font-size:13px}
+    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#0b1220;border:1px solid #1a2336;padding:2px 6px;border-radius:6px}
+
+    .section{display:none}
+    .section.show{display:block}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <!-- HOME -->
+      <section id="home" class="section show">
+        <h1>FADING — SKINNER</h1>
+        <p class="muted">Treino de discriminação com <b>fading do destaque</b>. Objetivo: selecionar sempre o <span class="kbd">Estímulo Discriminativo (S<sup>D</sup>)</span> correto — aqui representado pelo <b>termo-alvo</b>. A cada nível, o destaque visual reduz gradualmente.</p>
+
+        <div class="controls">
+          <select id="alvo" title="Termo alvo">
+            <option>SKINNER</option>
+            <option>REFORÇO</option>
+            <option>ESTÍMULO DISCRIMINATIVO</option>
+            <option>RESPOSTA</option>
+            <option>EXTINÇÃO</option>
+          </select>
+          <select id="dificuldade" title="Dificuldade">
+            <option value="0">Nível Básico (diferença maior)</option>
+            <option value="1">Intermediário</option>
+            <option value="2">Avançado (diferença mínima)</option>
+          </select>
+          <button id="btn-start" class="btn">▶️ Iniciar sessão (FR1)</button>
+        </div>
+        <p class="muted"><span class="badge">Esquema de Reforço: FR1</span> — reforço a cada acerto. Objetivo: <b>3 acertos</b> por nível para reduzir o destaque.</p>
+      </section>
+
+      <!-- ATIVIDADE -->
+      <section id="atividade" class="section">
+        <div class="row">
+          <h1>Selecione SEMPRE o termo-alvo (S<sup>D</sup>)</h1>
+        </div>
+        <p class="muted">A cada 3 acertos, o destaque diminui (fading). Mantenha o desempenho mesmo com pouco destaque visual.</p>
+
+        <div class="row">
+          <div class="prog" aria-label="Progresso do nível"><span id="bar"></span></div>
+          <div id="placar" class="muted">Nível: 1/5 | Acertos no nível: 0/3 | Total: 0/0</div>
+        </div>
+
+        <div class="stack" style="margin:16px 0">
+          <div id="left" class="cardbox" role="button" aria-label="Opção esquerda">
+            <div class="label" id="leftLabel">ALVO</div>
+            <div class="overlay" id="leftOverlay"></div>
+          </div>
+          <div id="right" class="cardbox" role="button" aria-label="Opção direita">
+            <div class="label" id="rightLabel">DISTRATOR</div>
+            <div class="overlay" id="rightOverlay"></div>
+          </div>
+        </div>
+
+        <div id="fb" class="feedback"></div>
+
+        <div class="center" style="gap:12px;margin-top:8px">
+          <button id="btn-voltar" class="btn btn-outline">⬅️ Voltar</button>
+          <button id="btn-nova" class="btn">🔄 Nova tentativa</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // ===== Config =====
+    const ACERTOS_PARA_AVANCAR = 3;
+    const OPACIDADE = [0.95, 0.70, 0.45, 0.22, 0.00]; // fading do MAIS forte ao MAIS fraco
+    const NIVEL_LABELS = ['Forte','Médio+','Médio','Fraco','Sem destaque'];
+
+    // ===== Estado =====
+    let termoAlvo = 'SKINNER';
+    let nivel = 0; // 0..OPACIDADE.length-1
+    let acertosNoNivel = 0;
+    let totalAcertos = 0;
+    let totalTentativas = 0;
+    let rodadaPronta = false;
+    let dif = 1; // 0,1,2
+
+    // ===== Util =====
+    const up = s => (s||'').trim().toUpperCase();
+    function rand(min,max){ return Math.floor(Math.random()*(max-min+1))+min }
+
+    // Geradores de distratores com similaridade controlada
+    function removerCaractere(s){
+      if(s.length<=3) return s;
+      const i = rand(1, s.length-2);
+      return s.slice(0,i) + s.slice(i+1);
+    }
+    function trocarAdjacentes(s){
+      if(s.length<=3) return s;
+      const i = rand(1, s.length-2);
+      return s.slice(0,i) + s[i+1] + s[i] + s.slice(i+2);
+    }
+    function substituirVogal(s){
+      const mapa = {A:'E',E:'I',I:'E',O:'A',U:'O'};
+      const arr = [...s];
+      for(let i=0;i<arr.length;i++){
+        const ch = arr[i];
+        if(mapa[ch]){ arr[i] = mapa[ch]; break; }
+      }
+      return arr.join('');
+    }
+    function acentuarOUremover(s){
+      // troca simples em termos longos (ex.: ESTÍMULO -> ESTIMULO / REFORÇO -> REFORCO)
+      return s.normalize('NFD').replace(/[\u0300-\u036f]/g,''); // remove acentos
+    }
+    function inserirCaractere(s){
+      const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const i = rand(1, s.length-1);
+      const ch = letras[rand(0, letras.length-1)];
+      return s.slice(0,i) + ch + s.slice(i);
+    }
+
+    function distrator(base, dificuldade){
+      // dificuldade 0: diferenças grandes; 1: médias; 2: mínimas
+      const b = up(base);
+      const ops0 = [inserirCaractere, removerCaractere];
+      const ops1 = [trocarAdjacentes, substituirVogal];
+      const ops2 = [substituirVogal, trocarAdjacentes, acentuarOUremover];
+      const pools = [ops0, ops1, ops2];
+      const op = pools[Math.min(dificuldade,2)][rand(0, pools[Math.min(dificuldade,2)].length-1)];
+      let out = op(b);
+      if(out === b){
+        // fallback: sempre garanta uma mínima diferença
+        out = (b.length>3)? trocarAdjacentes(b) : (b + 'R');
+      }
+      return out;
+    }
+
+    // ===== Elements =====
+    const secHome = document.getElementById('home');
+    const secAtiv = document.getElementById('atividade');
+    const selAlvo = document.getElementById('alvo');
+    const selDif = document.getElementById('dificuldade');
+    const btnStart = document.getElementById('btn-start');
+
+    const bar = document.getElementById('bar');
+    const placar = document.getElementById('placar');
+    const left = document.getElementById('left');
+    const right = document.getElementById('right');
+    const leftLabel = document.getElementById('leftLabel');
+    const rightLabel = document.getElementById('rightLabel');
+    const leftOverlay = document.getElementById('leftOverlay');
+    const rightOverlay = document.getElementById('rightOverlay');
+    const fb = document.getElementById('fb');
+    const btnVoltar = document.getElementById('btn-voltar');
+    const btnNova = document.getElementById('btn-nova');
+
+    function show(el){ el.classList.add('show') }
+    function hide(el){ el.classList.remove('show') }
+
+    function atualizarPlacar(){
+      const prog = acertosNoNivel / ACERTOS_PARA_AVANCAR;
+      bar.style.width = (prog*100)+'%';
+      placar.textContent = `Nível: ${nivel+1}/${OPACIDADE.length} (${NIVEL_LABELS[nivel]}) | Acertos no nível: ${acertosNoNivel}/${ACERTOS_PARA_AVANCAR} | Total: ${totalAcertos} acertos em ${totalTentativas} tentativas`;
+    }
+
+    function estiloCartao(texto, destacado, alpha){
+      leftOverlay.style.opacity = 0; rightOverlay.style.opacity = 0;
+      leftLabel.textContent = texto.left;
+      rightLabel.textContent = texto.right;
+      if(destacado.left && alpha>0) leftOverlay.style.opacity = alpha;
+      if(destacado.right && alpha>0) rightOverlay.style.opacity = alpha;
+    }
+
+    function prepararRodada(){
+      const ladoAlvo = Math.random()<0.5 ? 'esq' : 'dir';
+      const alpha = OPACIDADE[Math.min(nivel, OPACIDADE.length-1)];
+      const textos = { left: '', right: '' };
+      const dest = { left:false, right:false };
+      const altDistrator = distrator(termoAlvo, dif);
+
+      if(ladoAlvo==='esq'){
+        textos.left = up(termoAlvo);
+        textos.right = up(altDistrator);
+        dest.left = true; dest.right = false;
+        left.dataset.alvo = 'true'; right.dataset.alvo = 'false';
+      } else {
+        textos.right = up(termoAlvo);
+        textos.left = up(altDistrator);
+        dest.right = true; dest.left = false;
+        right.dataset.alvo = 'true'; left.dataset.alvo = 'false';
+      }
+      estiloCartao(textos, dest, alpha);
+      rodadaPronta = true;
+      fb.className = 'feedback';
+      fb.innerHTML = '';
+      atualizarPlacar();
+    }
+
+    function venceuNivel(){ return acertosNoNivel >= ACERTOS_PARA_AVANCAR }
+    function terminouTudo(){ return nivel >= OPACIDADE.length-1 && venceuNivel() }
+
+    function darFeedback(ok){
+      const msg = ok ? '✅ Reforço entregue (FR1): resposta correta ao S\u1d49 (termo-alvo).' : `✖ Resposta incorreta. O S\u1d49 era: ${up(termoAlvo)}.`;
+      const cls = ok ? 'fbok' : 'fberr';
+      fb.className = 'feedback show';
+      fb.innerHTML = `<div class="fbx ${cls}">${msg}</div>`;
+    }
+
+    function cliqueCartao(isLeft){
+      if(!rodadaPronta) return;
+      rodadaPronta = false;
+      totalTentativas += 1;
+      const alvoNaqueleLado = (isLeft ? left.dataset.alvo : right.dataset.alvo) === 'true';
+      if(alvoNaqueleLado){
+        totalAcertos += 1; acertosNoNivel += 1; darFeedback(true);
+        if(terminouTudo()){
+          alert('🏆 Parabéns! Você manteve o desempenho com mínimo destaque (fading concluído).');
+        } else if(venceuNivel()) {
+          nivel += 1; acertosNoNivel = 0;
+        }
+      } else {
+        darFeedback(false);
+      }
+      atualizarPlacar();
+    }
+
+    function novaRodada(){ prepararRodada() }
+
+    function iniciar(){
+      termoAlvo = selAlvo.value;
+      dif = parseInt(selDif.value,10);
+      nivel = 0; acertosNoNivel = 0; totalAcertos = 0; totalTentativas = 0; rodadaPronta = false;
+      hide(secHome); show(secAtiv);
+      prepararRodada();
+    }
+
+    // Eventos
+    btnStart.addEventListener('click', iniciar);
+    left.addEventListener('click', ()=>cliqueCartao(true));
+    right.addEventListener('click', ()=>cliqueCartao(false));
+    btnNova.addEventListener('click', novaRodada);
+    btnVoltar.addEventListener('click', ()=>{ hide(secAtiv); show(secHome) });
+  </script>
+</body>
+</html>
