@@ -4,12 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TEORIAS DA APRENDIZAGEM - PPGECT - Doutorado </title>
-
   <meta name="description" content="Página oficial das atividades do Programa de Doutorado em Ciências e Tecnologias." />
   <meta property="og:title" content="Atividades do Programa de Doutorado" />
   <meta property="og:description" content="Acompanhe atividades, eventos e materiais do doutorado." />
   <meta property="og:type" content="website" />
-
   <style>
     :root{
       --bg:#0b0b0c; --card:#121214; --muted:#2a2a2e; --text:#f6f6f7;
@@ -24,36 +22,14 @@
     .topbar{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
 
     /* Centralizar ícone e título */
-    .brand {
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      width:100%;
-      text-decoration:none;
-    }
+    .brand { display:flex; align-items:center; justify-content:center; width:100%; text-decoration:none; }
 
     /* Título maior e dourado */
-    .brand h2 {
-      font-size:32px;
-      color: var(--gold);   /* dourado igual ao "Bem-vindo(a)" */
-      margin:0;
-      font-weight:900;
-    }
+    .brand h2 { font-size:32px; color: var(--gold); margin:0; font-weight:900; }
 
     /* Nav actions (buttons) centralizados */
-    .nav-actions{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      justify-content:center; /* centraliza os botões */
-      flex-wrap:wrap;
-    }
-    .nav-actions .btn-nav{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:10px 14px;border-radius:999px;
-      background:#1f2937;color:var(--gold);text-decoration:none;font-weight:700;
-      border:1px solid #1f1f23;transition:.15s;
-    }
+    .nav-actions{ display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:wrap; }
+    .nav-actions .btn-nav{ display:inline-flex;align-items:center;gap:8px; padding:10px 14px;border-radius:999px; background:#1f2937;color:var(--gold);text-decoration:none;font-weight:700; border:1px solid #1f1f23;transition:.15s; }
     .nav-actions .btn-nav:hover{background:#243244}
 
     /* Hero */
@@ -63,15 +39,11 @@
 
     /* Search */
     .searchbar{margin:16px auto 0;max-width:780px;padding:0 16px}
-    .searchbar input{
-      width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);
-      background:#0f1115;color:var(--text);outline:none;font-size:16px;
-    }
+    .searchbar input{ width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line); background:#0f1115;color:var(--text);outline:none;font-size:16px; }
 
     /* Cards */
     .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px}
-    @media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:640px){.grid{grid-template-columns:1fr}}
+    @media (max-width:900px){ .grid{grid-template-columns:1fr} }
     .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px}
     .card h3{margin:0;color:var(--text);font-size:18px}
     .card p{margin:0;color:var(--sub)}
@@ -90,23 +62,12 @@
     .page{display:grid;grid-template-columns:220px 1fr;gap:24px;width:100%;margin:0}
     .sidebar{align-self:start;position:sticky;top:16px;margin-left:0}
     .side-menu{display:flex;flex-direction:column;gap:10px}
-    .side-btn{
-      display:block;
-      background:#1f1f23;
-      border:1px solid var(--line);
-      color:var(--text);
-      padding:10px 12px;
-      border-radius:12px;
-      text-decoration:none;
-      text-align:left;
-      font-weight:700;
-    }
+    .side-btn{ display:block; background:#1f1f23; border:1px solid var(--line); color:var(--text); padding:10px 12px; border-radius:12px; text-decoration:none; text-align:left; font-weight:700; }
     .side-btn:hover{background:#243244}
-    @media (max-width:900px){
-      .page{grid-template-columns:1fr}
-      .sidebar{position:static}
-    }
-
+    @media (max-width:900px){ .page{grid-template-columns:1fr} .sidebar{position:static} }
+    
+    /* contador de visitas */
+    .counter{ display:inline-flex; align-items:center; gap:6px; padding:8px 12px; border-radius:999px; background:#151517; border:1px solid var(--line); color:var(--gold); font-weight:700; }
   </style>
 </head>
 <body>
@@ -116,46 +77,39 @@
         <span aria-hidden="true">🎓</span>
         <h2>TEORIAS DA APRENDIZAGEM - PPGECT - Doutorado</h2>
       </a>
-      <nav class="nav-actions" aria-label="Ações rápidas">
-        <a class="btn-nav" href="./SKINER1.html">🎓 Seminário</a>
-        <a class="btn-nav" href="./Fading.html">🪄 Fading</a>
-        <a class="btn-nav" href="./Instrucao.html">📘 Instruções</a>
-        <a class="btn-nav" href="./keller.html">🧩 Keller</a>
-        <a class="btn-nav" href="./quiz_skinner_v2.html">📝 Quiz</a>
-        <a class="btn-nav" href="./Fading2.html">✨ Fading2</a>
-      </nav>
+      $1
+      <span id="visitas" class="counter" title="Contador de visitas">👀 Visitantes: —</span>
     </div>
   </header>
 
-
-  
   <main>
-<div class="page">
+    <div class="page">
       <aside class="sidebar" aria-label="Navegação lateral">
         <nav class="side-menu">
           <a class="side-btn" href="FICHAMENTO-%20%20Teorias%20cognitivas%20%20antigas.pdf" target="_blank" rel="noopener">1) Teroria Behavioristas antigas</a>
           <a class="side-btn" href="#">2) Teorias Cognitivas antigas</a>
           <a class="side-btn" href="#">3) A teoria behaviorista de Skiner</a>
           <a class="side-btn" href="#">4) A teoria de Gagné</a>
-         
-         
+          <!-- NOVO: botão que abre a atividade de Bruner -->
+          <a class="side-btn" href="./atividade-bruner.html">5) Teoria de Bruner — Atividade</a>
         </nav>
       </aside>
+
       <div class="maincol">
         <section class="hero">
-      <h2>Bem-vindo(a)! A Teoria behaviorista de Skiner </h2>
-      <p> Esta página lista automaticamente as atividades a partir do arquivo <code>docs.json</code>. 
-         Use a busca abaixo para encontrar rapidamente um item por título, descrição ou tag.</p>
-      <div class="searchbar">
-        <label class="sr-only" for="q">Buscar</label>
-        <input id="q" type="search" placeholder="Buscar por título, descrição ou tag..." autocomplete="off" />
-      </div>
-    </section>
+          <h2>Bem-vindo(a)! A Teoria behaviorista de Skiner </h2>
+          <p> Esta página lista automaticamente as atividades a partir do arquivo <code>docs.json</code>.
+            Use a busca abaixo para encontrar rapidamente um item por título, descrição ou tag.</p>
+          <div class="searchbar">
+            <label class="sr-only" for="q">Buscar</label>
+            <input id="q" type="search" placeholder="Buscar por título, descrição ou tag..." autocomplete="off" />
+          </div>
+        </section>
 
-    <section class="container">
-      <div id="lista" class="grid" aria-live="polite"></div>
-      <p id="mensagem" class="msg" style="display:none"></p>
-    </section>
+        <section class="container">
+          <div id="lista" class="grid" aria-live="polite"></div>
+          <p id="mensagem" class="msg" style="display:none"></p>
+        </section>
       </div>
     </div>
   </main>
@@ -227,6 +181,20 @@
 
     document.getElementById('q').addEventListener('input', e=> filtrar(e.target.value));
     carregar();
+    contadorVisitas();
+    
+    /* Contador de visitas com CountAPI (pageviews) */
+    async function contadorVisitas(){
+      try{
+        const ns = 'ppgect-site'; // namespace do contador
+        const key = location.hostname + location.pathname; // conta por página
+        const url = 'https://api.countapi.xyz/hit/' + encodeURIComponent(ns) + '/' + encodeURIComponent(key);
+        const res = await fetch(url, {cache:'no-store'});
+        const data = await res.json();
+        const el = document.getElementById('visitas');
+        if(el){ el.textContent = '👀 Visitantes: ' + (data.value||0).toLocaleString('pt-BR'); }
+      }catch(err){ console.error('contadorVisitas falhou:', err); }
+    }
   </script>
 </body>
 </html>
