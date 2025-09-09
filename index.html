@@ -85,6 +85,28 @@
     footer{border-top:1px solid var(--line);background:var(--card);color:#a3a3a8}
     footer .container{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
     .msg{padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:#151517;color:var(--sub);margin:0 16px 36px}
+  
+    /* === Sidebar (15 botões à esquerda) === */
+    .page{display:grid;grid-template-columns:220px 1fr;gap:24px}
+    .sidebar{align-self:start; position: sticky; top: 16px;}
+    .side-menu{display:flex;flex-direction:column;gap:10px}
+    .side-btn{
+      display:block;
+      background:#1f1f23;
+      border:1px solid var(--line);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      text-decoration:none;
+      text-align:left;
+      font-weight:700;
+    }
+    .side-btn:hover{background:#243244}
+    @media (max-width:900px){
+      .page{grid-template-columns:1fr}
+      .sidebar{position:static}
+    }
+
   </style>
 </head>
 <body>
@@ -106,7 +128,28 @@
   </header>
 
   <main>
-    <section class="hero">
+<div class="container page">
+      <aside class="sidebar" aria-label="Navegação lateral">
+        <nav class="side-menu">
+          <a class="side-btn" href="#">1) Teroria Behavioristas antigas</a>
+          <a class="side-btn" href="#">2) Teorias Cognitivas antigas</a>
+          <a class="side-btn" href="#">3) A teoria behaviorista de Skiner</a>
+          <a class="side-btn" href="#">4) A teoria de Gagné</a>
+          <a class="side-btn" href="#">5) Botão 5</a>
+          <a class="side-btn" href="#">6) Botão 6</a>
+          <a class="side-btn" href="#">7) Botão 7</a>
+          <a class="side-btn" href="#">8) Botão 8</a>
+          <a class="side-btn" href="#">9) Botão 9</a>
+          <a class="side-btn" href="#">10) Botão 10</a>
+          <a class="side-btn" href="#">11) Botão 11</a>
+          <a class="side-btn" href="#">12) Botão 12</a>
+          <a class="side-btn" href="#">13) Botão 13</a>
+          <a class="side-btn" href="#">14) Botão 14</a>
+          <a class="side-btn" href="#">15) Botão 15</a>
+        </nav>
+      </aside>
+      <div class="maincol">
+        <section class="hero">
       <h2>Bem-vindo(a)! A Teoria behaviorista de Skiner </h2>
       <p> Esta página lista automaticamente as atividades a partir do arquivo <code>docs.json</code>. 
          Use a busca abaixo para encontrar rapidamente um item por título, descrição ou tag.</p>
@@ -120,6 +163,8 @@
       <div id="lista" class="grid" aria-live="polite"></div>
       <p id="mensagem" class="msg" style="display:none"></p>
     </section>
+      </div>
+    </div>
   </main>
 
   <footer>
