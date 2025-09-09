@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Atividade — Teoria Behaviorista Antiga</title>
+  <style>
+    :root{
+      --bg:#0b1220;          /* fundo escuro elegante, combina com sites modernos */
+      --card:#111a2e;
+      --ink:#e9eefc;
+      --muted:#b8c3e6;
+      --accent:#5aa4ff;
+      --ok:#27c27d;
+      --bad:#ff5c7c;
+      --warn:#ffc857;
+    }
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial;}
+    .wrap{max-width:980px;margin:28px auto;padding:0 16px;}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
+          border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:20px;margin:16px 0;box-shadow:0 12px 24px rgba(0,0,0,.25)}
+    h1{font-size:clamp(22px,3.6vw,34px);margin:0 0 8px;}
+    h2{font-size:clamp(18px,2.8vw,24px);margin:14px 0 8px;color:var(--accent)}
+    p, li, label{line-height:1.5;color:var(--muted)}
+    .pill{display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(90,164,255,.12);color:#d7e6ff;border:1px solid rgba(90,164,255,.35);font-size:.9rem;margin-right:8px}
+    .q{margin:18px 0}
+    .q .prompt{font-weight:600;color:var(--ink);margin-bottom:8px}
+    .options{display:grid;gap:8px;margin-top:8px}
+    .options label{display:flex;gap:8px;align-items:flex-start;background:rgba(255,255,255,.04);padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.08)}
+    select, input[type="text"], textarea{width:100%;padding:10px;border-radius:10px;background:#0f1628;color:var(--ink);border:1px solid rgba(255,255,255,.15)}
+    textarea{min-height:90px;resize:vertical}
+    .grid{display:grid;gap:10px}
+    .grid.cols-2{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+    button{appearance:none;border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer}
+    .primary{background:var(--accent);color:#05162e}
+    .ghost{background:transparent;color:var(--ink);border:1px solid rgba(255,255,255,.2)}
+    .ok{background:var(--ok);color:#04251a}
+    .bad{background:var(--bad);color:#2e0610}
+    .hint{font-size:.92rem;color:#d2d9f3}
+    .hidden{display:none}
+    .badge{display:inline-flex;gap:6px;align-items:center;padding:4px 8px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+    .result-line{display:flex;justify-content:space-between;border-top:1px dashed rgba(255,255,255,.2);padding:6px 0;color:var(--muted)}
+    .mark-wrong{outline:2px solid var(--bad)}
+    .mark-right{outline:2px solid var(--ok)}
+    .foot{opacity:.8;font-size:.9rem}
+    .sr{position:absolute;left:-9999px}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="card">
+      <h1>Atividade — Teoria Behaviorista Antiga</h1>
+      <p>
+        <span class="pill">Watson</span>
+        <span class="pill">Pavlov</span>
+        <span class="pill">Thorndike</span>
+      </p>
+      <p><strong>Objetivo:</strong> aplicar e diferenciar noções centrais do behaviorismo clássico: estímulo–resposta, <em>condicionamento clássico</em> e <em>Lei do Efeito</em>, com foco em exemplos de sala de aula. <strong>Duração:</strong> 15–25 minutos.</p>
+      <p class="foot">Dica: você pode abrir esta atividade em uma nova aba e, no seu <em>index</em>, linkar o botão “Teoria Behaviorista Antiga” para o arquivo <code>atividade-behaviorismo-antiga.html</code>.</p>
+    </header>
+
+    <!-- Q1 -->
+    <section class="card q" data-qid="q1" data-type="mc">
+      <div class="prompt">1) Qual situação ilustra melhor o <strong>condicionamento clássico</strong>?</div>
+      <div class="options">
+        <label><input type="radio" name="q1" value="A">Um aluno recebe pontos extras por entregar a tarefa.</label>
+        <label><input type="radio" name="q1" value="B">Um cachorro começa a salivar ao ouvir a campainha associada à comida.</label>
+        <label><input type="radio" name="q1" value="C">Uma criança imita o professor resolvendo um problema.</label>
+        <label><input type="radio" name="q1" value="D">Um estudante passa a estudar mais após tirar nota baixa.</label>
+      </div>
+      <div class="hint hidden" id="hint-q1">Gabarito: B — associação entre estímulo neutro e estímulo incondicionado.</div>
+    </section>
+
+    <!-- Q2 Matching conceitos -->
+    <section class="card q" data-qid="q2" data-type="match">
+      <div class="prompt">2) Associe os <strong>conceitos do condicionamento clássico</strong> às definições corretas.</div>
+      <div class="grid cols-2">
+        <div>
+          <label for="q2-ei">Estímulo incondicionado (EI)</label>
+          <select id="q2-ei">
+            <option value="">— selecione —</option>
+            <option value="comida">Estímulo que produz resposta naturalmente (ex.: comida)</option>
+            <option value="som">Estímulo inicialmente neutro (ex.: som de campainha)</option>
+            <option value="salivacao">Resposta automática e não aprendida (ex.: salivação)</option>
+            <option value="resposta_aprendida">Resposta aprendida ao EC (ex.: salivação ao som)</option>
+          </select>
+        </div>
+        <div>
+          <label for="q2-ec">Estímulo condicionado (EC)</label>
+          <select id="q2-ec">
+            <option value="">— selecione —</option>
+            <option value="comida">Estímulo que produz resposta naturalmente (ex.: comida)</option>
+            <option value="som">Estímulo inicialmente neutro (ex.: som de campainha)</option>
+            <option value="salivacao">Resposta automática e não aprendida (ex.: salivação)</option>
+            <option value="resposta_aprendida">Resposta aprendida ao EC (ex.: salivação ao som)</option>
+          </select>
+        </div>
+        <div>
+          <label for="q2-ri">Resposta incondicionada (RI)</label>
+          <select id="q2-ri">
+            <option value="">— selecione —</option>
+            <option value="comida">Estímulo que produz resposta naturalmente (ex.: comida)</option>
+            <option value="som">Estímulo inicialmente neutro (ex.: som de campainha)</option>
+            <option value="salivacao">Resposta automática e não aprendida (ex.: salivação)</option>
+            <option value="resposta_aprendida">Resposta aprendida ao EC (ex.: salivação ao som)</option>
+          </select>
+        </div>
+        <div>
+          <label for="q2-rc">Resposta condicionada (RC)</label>
+          <select id="q2-rc">
+            <option value="">— selecione —</option>
+            <option value="comida">Estímulo que produz resposta naturalmente (ex.: comida)</option>
+            <option value="som">Estímulo inicialmente neutro (ex.: som de campainha)</option>
+            <option value="salivacao">Resposta automática e não aprendida (ex.: salivação)</option>
+            <option value="resposta_aprendida">Resposta aprendida ao EC (ex.: salivação ao som)</option>
+          </select>
+        </div>
+      </div>
+      <div class="hint hidden" id="hint-q2">Gabarito: EI→comida | EC→som | RI→salivação | RC→resposta_aprendida.</div>
+    </section>
+
+    <!-- Q3 classificação cenário -->
+    <section class="card q" data-qid="q3" data-type="mc">
+      <div class="prompt">3) Classifique o cenário: <em>“Após várias tentativas na caixa‑problema, o gato escapa cada vez mais rápido.”</em></div>
+      <div class="options">
+        <label><input type="radio" name="q3" value="classico">Condicionamento clássico</label>
+        <label><input type="radio" name="q3" value="lei">Lei do Efeito</label>
+        <label><input type="radio" name="q3" value="gestalt">Insight (Gestalt)</label>
+        <label><input type="radio" name="q3" value="latente">Aprendizagem latente</label>
+      </div>
+      <div class="hint hidden" id="hint-q3">Gabarito: Lei do Efeito (Thorndike) — respostas seguidas de sucesso tornam-se mais prováveis.</div>
+    </section>
+
+    <!-- Q4 V/F -->
+    <section class="card q" data-qid="q4" data-type="tf">
+      <div class="prompt">4) Julgue as afirmações (<strong>V</strong> ou <strong>F</strong>).</div>
+      <div class="grid">
+        <label>4.1) Para Watson, a psicologia deve focar em eventos observáveis.
+          <span class="sr">opções</span>
+          <select name="q4_1"><option value="">—</option><option value="V">V</option><option value="F">F</option></select>
+        </label>
+        <label>4.2) No condicionamento clássico, o comportamento é emitido e sofre consequências.
+          <select name="q4_2"><option value="">—</option><option value="V">V</option><option value="F">F</option></select>
+        </label>
+        <label>4.3) A Lei do Efeito diz que respostas seguidas de satisfação aumentam de probabilidade.
+          <select name="q4_3"><option value="">—</option><option value="V">V</option><option value="F">F</option></select>
+        </label>
+        <label>4.4) O estudo do “Pequeno Albert” mostrou generalização do medo.
+          <select name="q4_4"><option value="">—</option><option value="V">V</option><option value="F">F</option></select>
+        </label>
+      </div>
+      <div class="hint hidden" id="hint-q4">Gabarito: 4.1 V | 4.2 F (isso é operante) | 4.3 V | 4.4 V.</div>
+    </section>
+
+    <!-- Q5 Matching autores-experimentos -->
+    <section class="card q" data-qid="q5" data-type="match">
+      <div class="prompt">5) Relacione os <strong>experimentos clássicos</strong> aos pesquisadores.</div>
+      <div class="grid cols-2">
+        <div>
+          <label for="q5-a">Cães que salivam ao som</label>
+          <select id="q5-a">
+            <option value="">— selecione —</option>
+            <option value="pavlov">Pavlov</option>
+            <option value="watson">Watson</option>
+            <option value="thorndike">Thorndike</option>
+          </select>
+        </div>
+        <div>
+          <label for="q5-b">Pequeno Albert (medo condicionado)</label>
+          <select id="q5-b">
+            <option value="">— selecione —</option>
+            <option value="pavlov">Pavlov</option>
+            <option value="watson">Watson</option>
+            <option value="thorndike">Thorndike</option>
+          </select>
+        </div>
+        <div>
+          <label for="q5-c">Gatos em caixa‑problema</label>
+          <select id="q5-c">
+            <option value="">— selecione —</option>
+            <option value="pavlov">Pavlov</option>
+            <option value="watson">Watson</option>
+            <option value="thorndike">Thorndike</option>
+          </select>
+        </div>
+      </div>
+      <div class="hint hidden" id="hint-q5">Gabarito: Cães→Pavlov | Albert→Watson | Gatos→Thorndike.</div>
+    </section>
+
+    <!-- Q6 aberta -->
+    <section class="card q" data-qid="q6" data-type="open">
+      <div class="prompt">6) Em 2–3 linhas, aponte um <strong>limite</strong> do behaviorismo clássico para explicar processos mentais.
+      </div>
+      <textarea id="q6-text" placeholder="Escreva sua resposta aqui..."></textarea>
+      <p class="hint">Questão discursiva (não pontuada automaticamente). Será incluída no relatório de respostas.</p>
+    </section>
+
+    <section class="card">
+      <div class="actions">
+        <button class="primary" id="btn-finish">Finalizar e ver nota</button>
+        <button class="ghost" id="btn-reset" title="Limpa respostas e progresso">Limpar</button>
+        <button class="ghost" id="btn-print">Imprimir</button>
+        <button class="ghost" id="btn-toggle-key">Mostrar/ocultar gabarito</button>
+        <button class="ghost" id="btn-save">Baixar respostas (JSON)</button>
+      </div>
+      <div id="score" class="result" style="margin-top:14px"></div>
+    </section>
+
+    <footer class="wrap foot" style="text-align:center;margin-bottom:28px">
+      <span class="badge" title="Progresso salvo localmente">Progresso salvo no navegador • Behaviorismo clássico (Watson, Pavlov, Thorndike)</span>
+    </footer>
+  </main>
+
+  <script>
+    // ————— CONFIGURAÇÃO DO GABARITO —————
+    const key = {
+      q1: 'B',
+      q2: { ei:'comida', ec:'som', ri:'salivacao', rc:'resposta_aprendida' },
+      q3: 'lei',
+      q4: { q4_1:'V', q4_2:'F', q4_3:'V', q4_4:'V' },
+      q5: { a:'pavlov', b:'watson', c:'thorndike' }
+    };
+
+    // Utilidades
+    const qs = (s,root=document)=>root.querySelector(s);
+    const qsa = (s,root=document)=>[...root.querySelectorAll(s)];
+
+    // Persistência simples
+    const STORAGE='behav_antiga_v1';
+    function saveProgress(){
+      const data = collectResponses();
+      try{localStorage.setItem(STORAGE, JSON.stringify(data));}catch{ /* ignore */ }
+    }
+    function loadProgress(){
+      try{
+        const raw = localStorage.getItem(STORAGE);
+        if(!raw) return;
+        const data = JSON.parse(raw);
+        // q1
+        if(data.q1){ const el = qs(`input[name="q1"][value="${data.q1}"]`); if(el) el.checked=true; }
+        // q2
+        if(data.q2){
+          if(data.q2.ei) qs('#q2-ei').value = data.q2.ei;
+          if(data.q2.ec) qs('#q2-ec').value = data.q2.ec;
+          if(data.q2.ri) qs('#q2-ri').value = data.q2.ri;
+          if(data.q2.rc) qs('#q2-rc').value = data.q2.rc;
+        }
+        // q3
+        if(data.q3){ const el = qs(`input[name="q3"][value="${data.q3}"]`); if(el) el.checked=true; }
+        // q4
+        if(data.q4){ for(const k in data.q4){ const el=qs(`select[name="${k}"]`); if(el) el.value=data.q4[k]; }}
+        // q5
+        if(data.q5){
+          if(data.q5.a) qs('#q5-a').value=data.q5.a;
+          if(data.q5.b) qs('#q5-b').value=data.q5.b;
+          if(data.q5.c) qs('#q5-c').value=data.q5.c;
+        }
+        // q6
+        if(data.q6) qs('#q6-text').value = data.q6;
+      }catch{}
+    }
+
+    function collectResponses(){
+      const data={};
+      // q1
+      const r1 = qs('input[name="q1"]:checked');
+      data.q1 = r1?.value || '';
+      // q2
+      data.q2 = {
+        ei: qs('#q2-ei').value,
+        ec: qs('#q2-ec').value,
+        ri: qs('#q2-ri').value,
+        rc: qs('#q2-rc').value,
+      };
+      // q3
+      const r3 = qs('input[name="q3"]:checked');
+      data.q3 = r3?.value || '';
+      // q4
+      data.q4 = {
+        q4_1: qs('select[name="q4_1"]').value,
+        q4_2: qs('select[name="q4_2"]').value,
+        q4_3: qs('select[name="q4_3"]').value,
+        q4_4: qs('select[name="q4_4"]').value,
+      };
+      // q5
+      data.q5 = {
+        a: qs('#q5-a').value,
+        b: qs('#q5-b').value,
+        c: qs('#q5-c').value,
+      };
+      // q6
+      data.q6 = qs('#q6-text').value.trim();
+      return data;
+    }
+
+    function grade(){
+      const data = collectResponses();
+      let score=0, total=0;
+
+      // limpar marcas
+      qsa('.mark-wrong,.mark-right').forEach(el=>el.classList.remove('mark-wrong','mark-right'));
+
+      // Q1 (1 ponto)
+      total += 1;
+      const ok1 = data.q1 === key.q1;
+      if(ok1){ score += 1; qsa('[name="q1"]:checked').forEach(el=>el.closest('label').classList.add('mark-right')); }
+      else { const sel = qs('[name="q1"]:checked'); if(sel) sel.closest('label').classList.add('mark-wrong'); }
+
+      // Q2 (4 pontos, 1 cada)
+      for(const k of ['ei','ec','ri','rc']){
+        total += 1;
+        const el = qs('#q2-'+k);
+        if(data.q2[k] === key.q2[k]){ score += 1; el.classList.add('mark-right'); }
+        else if(el.value){ el.classList.add('mark-wrong'); }
+      }
+
+      // Q3 (1 ponto)
+      total += 1;
+      const ok3 = data.q3 === key.q3;
+      if(ok3){ score += 1; qsa('[name="q3"]:checked').forEach(el=>el.closest('label').classList.add('mark-right')); }
+      else { const sel = qs('[name="q3"]:checked'); if(sel) sel.closest('label').classList.add('mark-wrong'); }
+
+      // Q4 (4 pontos)
+      for(const k of ['q4_1','q4_2','q4_3','q4_4']){
+        total += 1;
+        const el = qs(`select[name="${k}"]`);
+        if(data.q4[k] === key.q4[k]){ score += 1; el.classList.add('mark-right'); }
+        else if(el.value){ el.classList.add('mark-wrong'); }
+      }
+
+      // Q5 (3 pontos)
+      for(const k of ['a','b','c']){
+        total += 1;
+        const el = qs('#q5-'+k);
+        if(data.q5[k] === key.q5[k]){ score += 1; el.classList.add('mark-right'); }
+        else if(el.value){ el.classList.add('mark-wrong'); }
+      }
+
+      const pct = Math.round((score/total)*100);
+      const result = `Nota: <strong>${score}</strong> / ${total} (${pct}%)`;
+      qs('#score').innerHTML = `
+        <div class="result-line"><span>Resultado</span><span>${result}</span></div>
+        <div class="result-line"><span>Itens corretos</span><span class="ok">${score}</span></div>
+        <div class="result-line"><span>Itens incorretos</span><span class="bad">${total-score}</span></div>
+        <p class="hint">Dica: use <em>Mostrar gabarito</em> para estudar onde errou.</p>
+      `;
+
+      saveProgress();
+      return {score,total,pct,data};
+    }
+
+    function toggleKey(){
+      qsa('.hint').forEach(h=>h.classList.toggle('hidden'));
+    }
+
+    function resetAll(){
+      // limpar entradas
+      qsa('input[type="radio"]').forEach(i=>i.checked=false);
+      qsa('select').forEach(s=>s.value='');
+      qs('#q6-text').value='';
+      qs('#score').innerHTML='';
+      qsa('.mark-wrong,.mark-right').forEach(el=>el.classList.remove('mark-wrong','mark-right'));
+      // limpar storage
+      try{localStorage.removeItem(STORAGE);}catch{}
+    }
+
+    function downloadJSON(){
+      const graded = grade(); // garante coleta atualizada
+      const payload = {
+        atividade: 'Teoria Behaviorista Antiga',
+        dataISO: new Date().toISOString(),
+        nota: graded.score,
+        total: graded.total,
+        percentual: graded.pct,
+        respostas: graded.data,
+      };
+      const blob = new Blob([JSON.stringify(payload,null,2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'respostas_behaviorismo_antigo.json';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // Eventos
+    window.addEventListener('DOMContentLoaded',()=>{
+      loadProgress();
+      // salvar ao mudar algo
+      qsa('input,select,textarea').forEach(el=>{
+        el.addEventListener('change', saveProgress);
+        el.addEventListener('input', saveProgress);
+      });
+      qs('#btn-finish').addEventListener('click', grade);
+      qs('#btn-reset').addEventListener('click', resetAll);
+      qs('#btn-print').addEventListener('click', ()=>window.print());
+      qs('#btn-toggle-key').addEventListener('click', toggleKey);
+      qs('#btn-save').addEventListener('click', downloadJSON);
+    });
+  </script>
+</body>
+</html>
