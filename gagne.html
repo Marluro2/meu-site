@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Atividade — Teoria de Gagné (9 Eventos)</title>
+  <style>
+    :root{ --bg:#0b1220; --card:#111a2e; --ink:#e9eefc; --muted:#b8c3e6; --accent:#5aa4ff; --ok:#27c27d; --bad:#ff5c7c; }
+    html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
+    .wrap{max-width:1080px;margin:28px auto;padding:0 16px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.09); border-radius:16px; padding:20px; margin:16px 0; box-shadow:0 12px 24px rgba(0,0,0,.25)}
+    h1{font-size:clamp(22px,3.6vw,34px);margin:0 0 6px}
+    h2{font-size:clamp(18px,2.8vw,24px);margin:0 0 8px;color:var(--accent)}
+    p, li, label{line-height:1.5;color:var(--muted)}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    button{appearance:none;border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer}
+    .primary{background:var(--accent);color:#05162e}
+    .ghost{background:transparent;color:var(--ink);border:1px solid rgba(255,255,255,.2)}
+    .ok{background:var(--ok);color:#04251a}
+    .bad{background:var(--bad);color:#2e0610}
+    .result-line{display:flex;justify-content:space-between;border-top:1px dashed rgba(255,255,255,.2);padding:6px 0;color:var(--muted)}
+    .grid{display:grid;gap:12px}
+    .cols-2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .hint{font-size:.92rem;color:#d2d9f3}
+    /* Drag list */
+    #orderList{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+    #orderList li{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 12px;display:flex;gap:12px;align-items:center}
+    #orderList li.dragging{opacity:.6;border-style:dashed}
+    .handle{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:2px 8px}
+    select{width:100%;padding:10px;border-radius:10px;background:#0f1628;color:var(--ink);border:1px solid rgba(255,255,255,.15)}
+    .mark-wrong{outline:2px solid var(--bad)}
+    .mark-right{outline:2px solid var(--ok)}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="card">
+      <h1>Atividade — Teoria de Gagné (9 Eventos)</h1>
+      <p><strong>Objetivo:</strong> reconhecer e organizar os <em>nove eventos de instrução</em> de Gagné e relacioná‑los a ações de sala de aula. <strong>Duração:</strong> 10–15 min. 
+      </p>
+      <div class="actions">
+        <button class="ghost" id="btn-print">Imprimir</button>
+        <button class="ghost" id="btn-save">Baixar respostas (CSV)</button>
+        <button class="ghost" id="btn-toggle-key">Mostrar/ocultar gabarito</button>
+        <button class="ghost" id="btn-reset">Limpar</button>
+      </div>
+      <p class="hint">No seu <em>index</em>, aponte o botão «Teoria de Gagné» para <code>atividade-gagne.html</code>.</p>
+    </header>
+
+    <!-- Parte A: Ordenar os 9 eventos -->
+    <section class="card">
+      <h2>Parte A — Ordene os 9 eventos de instrução</h2>
+      <p>Arraste os itens para colocá‑los na <strong>sequência correta</strong>. Depois clique em <em>Finalizar</em>.</p>
+      <ol id="orderList"></ol>
+      <div class="actions">
+        <button class="primary" id="btn-grade">Finalizar e ver nota</button>
+        <button class="ghost" id="btn-shuffle">Embaralhar</button>
+        <button class="ghost" id="btn-resetA">Reiniciar Parte A</button>
+      </div>
+      <div class="hint hidden" id="keyA">Gabarito (ordem): 1 Ganhar atenção · 2 Informar objetivos · 3 Estimular recordação de pré‑requisitos · 4 Apresentar o conteúdo · 5 Fornecer orientação · 6 Elicitar desempenho · 7 Fornecer feedback · 8 Avaliar desempenho · 9 Promover retenção e transferência.</div>
+    </section>
+
+    <!-- Parte B: Associe exemplos -->
+    <section class="card">
+      <h2>Parte B — Associe cada exemplo ao evento</h2>
+      <div class="grid cols-2">
+        <label>1) «Mostrar um desafio curioso de 30 segundos no início da aula.»
+          <select id="b1">
+            <option value="">— selecione —</option>
+          </select>
+        </label>
+        <label>2) «Dizer: hoje você será capaz de resolver sistemas por substituição.»
+          <select id="b2">
+            <option value="">— selecione —</option>
+          </select>
+        </label>
+        <label>3) «Perguntar o que lembram da última aula sobre equações lineares.»
+          <select id="b3">
+            <option value="">— selecione —</option>
+          </select>
+        </label>
+        <label>4) «Propor 3 exercícios guiados antes da atividade individual.»
+          <select id="b4">
+            <option value="">— selecione —</option>
+          </select>
+        </label>
+      </div>
+      <div class="hint hidden" id="keyB">Gabarito: (1) Ganhar atenção · (2) Informar objetivos · (3) Estimular recordação · (4) Fornecer orientação.</div>
+    </section>
+
+    <section class="card">
+      <div class="actions">
+        <button class="primary" id="btn-grade2">Reavaliar tudo</button>
+      </div>
+      <div id="score" style="margin-top:12px"></div>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE='gagne_v1';
+    const qs=(s,root=document)=>root.querySelector(s);
+    const qsa=(s,root=document)=>[...root.querySelectorAll(s)];
+
+    const EVENTS=[
+      'Ganhar atenção', //1
+      'Informar objetivos', //2
+      'Estimular recordação de pré‑requisitos', //3
+      'Apresentar o conteúdo', //4
+      'Fornecer orientação', //5
+      'Elicitar desempenho', //6
+      'Fornecer feedback', //7
+      'Avaliar desempenho', //8
+      'Promover retenção e transferência' //9
+    ];
+
+    // ========= Parte A (drag & drop) =========
+    const orderList = qs('#orderList');
+
+    function renderList(items){
+      orderList.innerHTML='';
+      items.forEach((txt,idx)=>{
+        const li=document.createElement('li');
+        li.draggable=true; li.dataset.idx=idx; li.textContent=txt; 
+        const span=document.createElement('span'); span.className='handle'; span.textContent=String(idx+1).padStart(2,'0');
+        li.prepend(span);
+        // dnd
+        li.addEventListener('dragstart', e=>{ li.classList.add('dragging'); e.dataTransfer.setData('text/plain', idx); });
+        li.addEventListener('dragend', ()=>li.classList.remove('dragging'));
+        li.addEventListener('dragover', e=>{ e.preventDefault(); });
+        li.addEventListener('drop', e=>{
+          e.preventDefault();
+          const from = Number(e.dataTransfer.getData('text/plain'));
+          const to = [...orderList.children].indexOf(li);
+          moveItem(from,to);
+        });
+        orderList.appendChild(li);
+      });
+    }
+
+    function getCurrent(){ return [...orderList.children].map(li=>li.textContent.replace(/^\d+\s*/,'').trim()); }
+
+    function moveItem(from,to){
+      const arr = getCurrent();
+      const [x] = arr.splice(from,1); arr.splice(to,0,x);
+      renderList(arr); save('A',arr);
+    }
+
+    function shuffle(){
+      const arr=[...EVENTS];
+      for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]] }
+      renderList(arr); save('A',arr);
+    }
+
+    function gradeA(){
+      qsa('#orderList li').forEach(li=>li.classList.remove('mark-right','mark-wrong'));
+      const cur = getCurrent(); let ok=0;
+      cur.forEach((txt,i)=>{
+        const li = orderList.children[i];
+        if(txt===EVENTS[i]){ ok++; li.classList.add('mark-right'); } else { li.classList.add('mark-wrong'); }
+      });
+      return {ok,total:EVENTS.length};
+    }
+
+    // ========= Parte B (matching) =========
+    const OPTIONS=[...EVENTS];
+    function fillOptions(sel){
+      OPTIONS.forEach(op=>{ const o=document.createElement('option'); o.value=op; o.textContent=op; sel.appendChild(o); });
+    }
+
+    function gradeB(){
+      const key={ b1:'Ganhar atenção', b2:'Informar objetivos', b3:'Estimular recordação de pré‑requisitos', b4:'Fornecer orientação' };
+      let ok=0,total=4;
+      for(const id of ['b1','b2','b3','b4']){
+        const sel=qs('#'+id); sel.classList.remove('mark-right','mark-wrong');
+        if(sel.value && sel.value===key[id]){ ok++; sel.classList.add('mark-right'); }
+        else if(sel.value){ sel.classList.add('mark-wrong'); }
+      }
+      return {ok,total};
+    }
+
+    // ========= Persistência / util =========
+    function save(key,val){ try{ const all=JSON.parse(localStorage.getItem(STORAGE)||'{}'); all[key]=val; localStorage.setItem(STORAGE,JSON.stringify(all)); }catch{} }
+    function load(){ try{ return JSON.parse(localStorage.getItem(STORAGE)||'{}'); }catch{return {}} }
+
+    function collect(){
+      const A = getCurrent();
+      const B = { b1:qs('#b1').value, b2:qs('#b2').value, b3:qs('#b3').value, b4:qs('#b4').value };
+      return {A,B};
+    }
+
+    function restore(){
+      const d=load();
+      if(d.A) renderList(d.A); else shuffle();
+      for(const id of ['b1','b2','b3','b4']){ if(d.B&&d.B[id]) qs('#'+id).value=d.B[id]; }
+    }
+
+    function toCSV(rows){ return rows.map(r=>r.map(x=>`"${String(x??'').replaceAll('"','""')}"`).join(',')).join('\n'); }
+
+    function downloadCSV(){
+      const d=collect();
+      const rows=[["Atividade Gagné", new Date().toISOString()],["Parte","Item","Resposta"], ...d.A.map((txt,i)=>['A',i+1,txt]), ['B','b1',d.B.b1], ['B','b2',d.B.b2], ['B','b3',d.B.b3], ['B','b4',d.B.b4] ];
+      const blob = new Blob([toCSV(rows)],{type:'text/csv;charset=utf-8;'}); const url=URL.createObjectURL(blob);
+      const a=document.createElement('a'); a.href=url; a.download='atividade_gagne_respostas.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+
+    function gradeAll(){
+      const rA=gradeA(); const rB=gradeB(); const ok=rA.ok+rB.ok; const total=rA.total+rB.total; const pct=Math.round(ok/total*100);
+      save('A',getCurrent()); save('B',{ b1:qs('#b1').value, b2:qs('#b2').value, b3:qs('#b3').value, b4:qs('#b4').value });
+      qs('#score').innerHTML = `
+        <div class="result-line"><span>Itens corretos</span><span><strong>${ok}</strong> / ${total} (${pct}%)</span></div>
+        <div class="result-line"><span>Ordem correta na Parte A</span><span>${rA.ok} / ${rA.total}</span></div>
+        <div class="result-line"><span>Associações corretas na Parte B</span><span>${rB.ok} / ${rB.total}</span></div>
+        <p class="hint">Use «Mostrar gabarito» para revisar a sequência e os exemplos.</p>
+      `;
+    }
+
+    function toggleKey(){ qsa('.hint').forEach(h=>h.classList.toggle('hidden')); }
+    function resetAll(){ localStorage.removeItem(STORAGE); location.reload(); }
+
+    // ========= Init =========
+    window.addEventListener('DOMContentLoaded',()=>{
+      // preencher selects da Parte B
+      ['b1','b2','b3','b4'].forEach(id=>fillOptions(qs('#'+id)));
+      restore();
+      qs('#btn-grade').addEventListener('click', gradeAll);
+      qs('#btn-grade2').addEventListener('click', gradeAll);
+      qs('#btn-shuffle').addEventListener('click', ()=>{ shuffle(); save('A',getCurrent()); });
+      qs('#btn-resetA').addEventListener('click', ()=>{ renderList(EVENTS); save('A',EVENTS); });
+      qsa('select').forEach(sel=>sel.addEventListener('change', ()=>save('B',{...collect().B})));
+      qs('#btn-save').addEventListener('click', downloadCSV);
+      qs('#btn-toggle-key').addEventListener('click', toggleKey);
+      qs('#btn-print').addEventListener('click', ()=>window.print());
+      qs('#btn-reset').addEventListener('click', resetAll);
+    });
+  </script>
+</body>
+</html>
