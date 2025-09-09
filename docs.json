@@ -33,5 +33,14 @@
     "url": "./keller.html",
     "data": "2025-09-03",
     "tags": ["PSI", "Keller"]
-  }
+  },
+{
+  "titulo": "Fading2 (atividade)",
+  "descricao": "Treino de discriminação com redução gradual do destaque (fading avançado).",
+  "url": "./Fading2.html",
+  "data": "2025-09-08",
+  "tags": ["atividade", "fading2", "skinner"]
+}
+
+
 ]
