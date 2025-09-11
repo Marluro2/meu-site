@@ -124,6 +124,48 @@
         correta: "D",
         justificativa: "O apito do árbitro funciona como Eᴰ, pois sinaliza que o chute pode ser realizado e que terá consequência válida dentro das regras.",
       },
+    
+      ,
+      {
+        id: 4,
+        titulo: "Exercício 4 – Estímulo Delta (Biblioteca)",
+        enunciado: "Um aluno vai imprimir materiais, mas encontra a porta trancada e a placa 'Fechado'. Ele decide voltar em outro horário. Qual é o estímulo delta (SΔ)?",
+        alternativas: {
+          A: "A vontade do aluno de imprimir",
+          B: "A porta trancada e a placa 'Fechado'",
+          C: "A impressora da biblioteca",
+          D: "O momento em que ele volta no dia seguinte",
+        },
+        correta: "B",
+        justificativa: "SΔ indica a ausência de reforço para a resposta naquele momento (serviço indisponível). A placa/porta fechada sinaliza que tentar imprimir agora não produzirá o reforço.",
+      },
+      {
+        id: 5,
+        titulo: "Exercício 5 – Estímulo Delta (Máquina de Bebidas)",
+        enunciado: "Uma máquina exibe 'Fora de serviço'. As pessoas param de inserir moedas. Qual é o estímulo delta (SΔ)?",
+        alternativas: {
+          A: "Inserir moedas",
+          B: "Receber a bebida",
+          C: "O aviso 'Fora de serviço' na máquina",
+          D: "A sede das pessoas",
+        },
+        correta: "C",
+        justificativa: "O aviso funciona como SΔ, por sinalizar que a resposta (inserir moedas) não será reforçada (sem produto/sem entrega).",
+      },
+      {
+        id: 6,
+        titulo: "Exercício 6 – Estímulo Delta (Trânsito)",
+        enunciado: "Um pedestre vê o sinal VERMELHO para pedestres e decide não atravessar. Qual é o estímulo delta (SΔ)?",
+        alternativas: {
+          A: "A decisão de esperar",
+          B: "O reforço de atravessar em segurança",
+          C: "O fluxo de carros",
+          D: "O sinal vermelho para pedestres",
+        },
+        correta: "D",
+        justificativa: "O sinal vermelho é SΔ: ele indica que a resposta 'atravessar agora' não produzirá o reforço natural de segurança/fluidêz.",
+      }
+
     ];
 
     const MOTIVACIONAIS = [
@@ -137,6 +179,15 @@
       "Quase! Lembre-se: Eᴰ é o que sinaliza a chance de reforço.",
       "Siga tentando! Identificar o Eᴰ ajuda a prever o comportamento.",
     ];
+
+    // ===== Embaralhar questões =====
+    (function embaralhar(a){
+      for(let i=a.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [a[i],a[j]]=[a[j],a[i]];
+      }
+    })(QUESTOES);
+
 
     // ===== Estado =====
     let idxAtual = 0;
