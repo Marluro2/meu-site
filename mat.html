@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Teste — Banco de Questões (Protegido)</title>
+<style>
+:root { --fg:#111; --muted:#555; --accent:#1a73e8; }
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,sans-serif;line-height:1.45;color:var(--fg);margin:24px}
+h1{margin:0 0 8px 0}
+p.desc{margin:0 0 24px 0;color:var(--muted)}
+.section{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:18px 18px 8px 18px;margin:16px 0;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.q-title{font-weight:600;margin-bottom:10px}
+.q-image{display:block;max-width:100%;height:auto;border:1px solid #e5e7eb;border-radius:8px;margin:8px 0 12px 0}
+.choice{display:flex;align-items:center;padding:6px 8px;border:1px solid #e5e7eb;border-radius:10px;margin:8px 0;cursor:pointer}
+.choice input{margin-right:10px}
+.choice.correct{border-color:#16a34a;background:#f0fdf4}
+.choice.incorrect{border-color:#dc2626;background:#fef2f2}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+button{border:none;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer;background:var(--accent);color:#fff}
+button.secondary{background:#f3f4f6;color:#111;border:1px solid #e5e7eb}
+.result{padding:14px;border:2px dashed #c7ced9;border-radius:12px;margin-top:14px;background:#fafafa}
+.small{color:var(--muted);font-size:.9rem}
+footer{margin-top:28px;color:var(--muted);font-size:.9rem}
+hr{border:none;border-top:1px solid #eee;margin:16px 0}
+
+/* Lock screen */
+#lock { position: fixed; inset: 0; background: #0f172a; color: #e5e7eb;
+  display: grid; place-items: center; padding: 24px; z-index: 9999; }
+.lock-card { width: 100%; max-width: 520px; background: #111827; border: 1px solid #374151;
+  border-radius: 14px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+.lock-card h2{margin:0 0 8px 0; font-size: 1.25rem}
+.lock-card p{margin:0 0 16px 0; color:#9ca3af}
+.lock-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px}
+.lock-row input{
+  padding:12px 12px; border-radius:10px; border:1px solid #4b5563;
+  background:#0b1220; color:#e5e7eb; outline:none;
+}
+.lock-row button{white-space:nowrap}
+.lock-msg{min-height:20px; color:#fca5a5; margin-top:8px}
+#app { display:none; }
+.header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px }
+.badge { background:#eef2ff; color:#3730a3; padding:6px 10px; border-radius:999px; font-weight:600; }
+.send { margin-left:auto; color:#555; font-size:.9rem }
+</style>
+</head>
+<body>
+  <!-- BLOQUEIO / SENHA + NOME -->
+  <div id="lock" role="dialog" aria-modal="true" aria-labelledby="lock-title">
+    <div class="lock-card">
+      <h2 id="lock-title">Acesso restrito</h2>
+      <p>Digite seu <strong>nome completo</strong> e a senha para abrir o teste.</p>
+      <div class="lock-row">
+        <input id="student-name" type="text" placeholder="Nome completo" autocomplete="name">
+        <input id="pw" type="password" placeholder="Senha (padrão)" autocomplete="current-password">
+        <button id="unlock-btn" onclick="unlock()">Entrar</button>
+      </div>
+      <div id="lock-msg" class="lock-msg"></div>
+      <p class="small">Senha padrão definida pelo autor.</p>
+    </div>
+  </div>
+
+  <!-- CONTEÚDO DO TESTE -->
+  <div id="app">
+    <div class="header">
+      <h1>Teste — Banco de Questões</h1>
+      <div class="badge" title="Nome informado no acesso"><span id="display-name">—</span></div>
+      <div class="send" id="send-status">Envio por e-mail: aguardando…</div>
+    </div>
+    <p class="desc">Selecione a alternativa correta em cada questão e clique em <strong>Corrigir</strong>. O nome digitado ficará associado ao seu resultado. Ao corrigir, o resultado será enviado ao proprietário.</p>
+
+    <!-- QUESTÕES (fieis às anteriores) -->
+    <div class="section" data-index="0" data-answer="1">
+      <div class="q-title"><strong>Q.1 (1.00)</strong> — Determine as raízes de x<sup>2</sup> - 11x + 30 = 0.</div>
+      <label class="choice"><input type="radio" name="q0" value="0"><span><strong>a)</strong> {3, 10}</span></label>
+      <label class="choice"><input type="radio" name="q0" value="1"><span><strong>b)</strong> {5, 6}</span></label>
+      <label class="choice"><input type="radio" name="q0" value="2"><span><strong>c)</strong> {-5, 6}</span></label>
+      <label class="choice"><input type="radio" name="q0" value="3"><span><strong>d)</strong> {-5, -6}</span></label>
+      <label class="choice"><input type="radio" name="q0" value="4"><span><strong>e)</strong> {4, 7}</span></label>
+    </div>
+
+    <div class="section" data-index="1" data-answer="0">
+      <div class="q-title"><strong>Q.2 (1.00)</strong> — Determine as raízes de x<sup>2</sup> - 4x - 21 = 0.</div>
+      <label class="choice"><input type="radio" name="q1" value="0"><span><strong>a)</strong> {7, -3}</span></label>
+      <label class="choice"><input type="radio" name="q1" value="1"><span><strong>b)</strong> {-7, -3}</span></label>
+      <label class="choice"><input type="radio" name="q1" value="2"><span><strong>c)</strong> {3, 7}</span></label>
+      <label class="choice"><input type="radio" name="q1" value="3"><span><strong>d)</strong> {-1, 21}</span></label>
+      <label class="choice"><input type="radio" name="q1" value="4"><span><strong>e)</strong> {1, -21}</span></label>
+    </div>
+
+    <div class="section" data-index="2" data-answer="1">
+      <div class="q-title"><strong>Q.3 (1.00)</strong> — Determine as raízes de x<sup>2</sup> + x - 12 = 0.</div>
+      <label class="choice"><input type="radio" name="q2" value="0"><span><strong>a)</strong> {-3, 4}</span></label>
+      <label class="choice"><input type="radio" name="q2" value="1"><span><strong>b)</strong> {3, -4}</span></label>
+      <label class="choice"><input type="radio" name="q2" value="2"><span><strong>c)</strong> {2, -6}</span></label>
+      <label class="choice"><input type="radio" name="q2" value="3"><span><strong>d)</strong> {-2, 6}</span></label>
+      <label class="choice"><input type="radio" name="q2" value="4"><span><strong>e)</strong> {-3, -4}</span></label>
+    </div>
+
+    <div class="section" data-index="3" data-answer="2">
+      <div class="q-title"><strong>Q.4 (1.00)</strong> — Um projétil é lançado verticalmente, e sua altura é dada por h(t) = -4t<sup>2</sup> + 24t. Qual o instante da altura máxima?</div>
+      <label class="choice"><input type="radio" name="q3" value="0"><span><strong>a)</strong> 1</span></label>
+      <label class="choice"><input type="radio" name="q3" value="1"><span><strong>b)</strong> 2</span></label>
+      <label class="choice"><input type="radio" name="q3" value="2"><span><strong>c)</strong> 3</span></label>
+      <label class="choice"><input type="radio" name="q3" value="3"><span><strong>d)</strong> 4</span></label>
+      <label class="choice"><input type="radio" name="q3" value="4"><span><strong>e)</strong> 6</span></label>
+    </div>
+
+    <div class="section" data-index="4" data-answer="2">
+      <div class="q-title"><strong>Q.5 (1.00)</strong> — Um foguete de brinquedo é lançado verticalmente, e sua altura h, em metros, após t segundos, é dada por h(t) = -3t<sup>2</sup> + 18t - 9. Qual é a altura máxima atingida pelo foguete?</div>
+      <label class="choice"><input type="radio" name="q4" value="0"><span><strong>a)</strong> 12</span></label>
+      <label class="choice"><input type="radio" name="q4" value="1"><span><strong>b)</strong> 15</span></label>
+      <label class="choice"><input type="radio" name="q4" value="2"><span><strong>c)</strong> 18</span></label>
+      <label class="choice"><input type="radio" name="q4" value="3"><span><strong>d)</strong> 20</span></label>
+      <label class="choice"><input type="radio" name="q4" value="4"><span><strong>e)</strong> 27</span></label>
+    </div>
+
+    <div class="section" data-index="5" data-answer="2">
+      <div class="q-title"><strong>Q.6 (1.00)</strong> — Considerando f(x)=x<sup>2</sup> + 4x + 1, o valor de f(5) - f(2) é igual a:</div>
+      <label class="choice"><input type="radio" name="q5" value="0"><span><strong>a)</strong> 28</span></label>
+      <label class="choice"><input type="radio" name="q5" value="1"><span><strong>b)</strong> 30</span></label>
+      <label class="choice"><input type="radio" name="q5" value="2"><span><strong>c)</strong> 33</span></label>
+      <label class="choice"><input type="radio" name="q5" value="3"><span><strong>d)</strong> 35</span></label>
+      <label class="choice"><input type="radio" name="q5" value="4"><span><strong>e)</strong> 36</span></label>
+    </div>
+
+    <div class="section" data-index="6" data-answer="3">
+      <div class="q-title"><strong>Q.7 (1.00)</strong> — O valor de x que satisfaz a equação 4<sup>x-1</sup> = 64 é:</div>
+      <label class="choice"><input type="radio" name="q6" value="0"><span><strong>a)</strong> 1</span></label>
+      <label class="choice"><input type="radio" name="q6" value="1"><span><strong>b)</strong> 2</span></label>
+      <label class="choice"><input type="radio" name="q6" value="2"><span><strong>c)</strong> 3</span></label>
+      <label class="choice"><input type="radio" name="q6" value="3"><span><strong>d)</strong> 4</span></label>
+      <label class="choice"><input type="radio" name="q6" value="4"><span><strong>e)</strong> 5</span></label>
+    </div>
+
+    <div class="section" data-index="7" data-answer="1">
+      <div class="q-title"><strong>Q.8 (1.00)</strong> — O valor de x que satisfaz a equação 3<sup>2x+1</sup> = 243 é:</div>
+      <label class="choice"><input type="radio" name="q7" value="0"><span><strong>a)</strong> 1</span></label>
+      <label class="choice"><input type="radio" name="q7" value="1"><span><strong>b)</strong> 2</span></label>
+      <label class="choice"><input type="radio" name="q7" value="2"><span><strong>c)</strong> 3</span></label>
+      <label class="choice"><input type="radio" name="q7" value="3"><span><strong>d)</strong> 4</span></label>
+      <label class="choice"><input type="radio" name="q7" value="4"><span><strong>e)</strong> 5</span></label>
+    </div>
+
+    <div class="section" data-index="8" data-answer="0">
+      <div class="q-title"><strong>Q.9 (1.00)</strong> — Seja a função f: R → R dada por f(x) = |3x - 6|. Determinando os valores de f(-2), f(0) e f(4), encontraremos, respectivamente:</div>
+      <label class="choice"><input type="radio" name="q8" value="0"><span><strong>a)</strong> {12, 6, 6}</span></label>
+      <label class="choice"><input type="radio" name="q8" value="1"><span><strong>b)</strong> {6, 6, 12}</span></label>
+      <label class="choice"><input type="radio" name="q8" value="2"><span><strong>c)</strong> {12, 12, 6}</span></label>
+      <label class="choice"><input type="radio" name="q8" value="3"><span><strong>d)</strong> {6, 12, 6}</span></label>
+      <label class="choice"><input type="radio" name="q8" value="4"><span><strong>e)</strong> {12, 6, 0}</span></label>
+    </div>
+
+    <div class="section" data-index="9" data-answer="1">
+      <div class="q-title"><strong>Q.10 (1.00)</strong> — A solução da equação |2x + 1| = 7 será:</div>
+      <label class="choice"><input type="radio" name="q9" value="0"><span><strong>a)</strong> S = {-3, 4}</span></label>
+      <label class="choice"><input type="radio" name="q9" value="1"><span><strong>b)</strong> S = {3, -4}</span></label>
+      <label class="choice"><input type="radio" name="q9" value="2"><span><strong>c)</strong> S = {-3, -4}</span></label>
+      <label class="choice"><input type="radio" name="q9" value="3"><span><strong>d)</strong> S = {3, 4}</span></label>
+      <label class="choice"><input type="radio" name="q9" value="4"><span><strong>e)</strong> S = {-7, 7}</span></label>
+    </div>
+
+    <div class="section" data-index="10" data-answer="1">
+      <div class="q-title"><strong>Q.11 (1.00)</strong> — Sabe-se que o custo C para produzir x unidades de certo produto é dado por C = x<sup>2</sup> - 60x + 2000. Nessas condições, a quantidade de unidades produzidas para que o custo seja mínimo e o valor mínimo do custo são, respectivamente:</div>
+      <label class="choice"><input type="radio" name="q10" value="0"><span><strong>a)</strong> 20 unidades e R$ 1.200,00</span></label>
+      <label class="choice"><input type="radio" name="q10" value="1"><span><strong>b)</strong> 30 unidades e R$ 1.100,00</span></label>
+      <label class="choice"><input type="radio" name="q10" value="2"><span><strong>c)</strong> 40 unidades e R$ 1.200,00</span></label>
+      <label class="choice"><input type="radio" name="q10" value="3"><span><strong>d)</strong> 30 unidades e R$ 1.200,00</span></label>
+      <label class="choice"><input type="radio" name="q10" value="4"><span><strong>e)</strong> 25 unidades e R$ 1.100,00</span></label>
+    </div>
+
+    <div class="section" data-index="11" data-answer="0">
+      <div class="q-title"><strong>Q.12 (1.00)</strong> — O custo de produção de x unidades é dado por C = 2x<sup>2</sup> - 100x + 2500. A quantidade x que minimiza o custo e o valor mínimo são, respectivamente:</div>
+      <label class="choice"><input type="radio" name="q11" value="0"><span><strong>a)</strong> 25 unidades e R$ 1.250,00</span></label>
+      <label class="choice"><input type="radio" name="q11" value="1"><span><strong>b)</strong> 50 unidades e R$ 1.000,00</span></label>
+      <label class="choice"><input type="radio" name="q11" value="2"><span><strong>c)</strong> 20 unidades e R$ 1.200,00</span></label>
+      <label class="choice"><input type="radio" name="q11" value="3"><span><strong>d)</strong> 25 unidades e R$ 1.000,00</span></label>
+      <label class="choice"><input type="radio" name="q11" value="4"><span><strong>e)</strong> 40 unidades e R$ 1.600,00</span></label>
+    </div>
+
+    <div class="actions">
+      <button onclick="gradeQuiz()">Corrigir</button>
+      <button class="secondary" onclick="clearQuiz()">Limpar respostas</button>
+    </div>
+    <div id="result" class="result">—</div>
+    <footer><hr>Gerado automaticamente — protegido por senha e com registro de nome; envia resultado por e-mail ao proprietário.</footer>
+  </div>
+
+<script>
+const PASSWORD = "ifsp2025";
+// Substitua pela URL do seu Web App Google Apps Script (depois de publicar)
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbxVcghYK5KDjSeLJ6wobF4dX-NRfmoAICllE7FwmusIeL-SQeQrNAfwwSICCf3O5d7uPQ/exec";
+
+function unlock(){
+  const name = document.getElementById('student-name').value.trim();
+  const pw = document.getElementById('pw').value.trim();
+  const msg = document.getElementById('lock-msg');
+  if(!name){ msg.textContent = "Informe seu nome completo."; return; }
+  if(!pw){ msg.textContent = "Digite a senha."; return; }
+  if(pw !== PASSWORD){ msg.textContent = "Senha incorreta."; return; }
+  localStorage.setItem('quiz_student_name', name);
+  document.getElementById('display-name').textContent = name;
+  document.getElementById('lock').style.display='none';
+  document.getElementById('app').style.display='block';
+}
+
+function gradeQuiz(){
+  const blocks = document.querySelectorAll('.section[data-index]');
+  let correct = 0;
+  const answers = [];
+  // opcional: destacar certo/errado
+  blocks.forEach(block => {
+    const correctIdx = parseInt(block.dataset.answer,10);
+    const radios = block.querySelectorAll('input[type=radio]');
+    radios.forEach(l=>l.parentElement.classList.remove('correct','incorrect'));
+    const selected = block.querySelector('input[type=radio]:checked');
+    let selIdx = null;
+    if(selected){
+      selIdx = parseInt(selected.value,10);
+      if(selIdx===correctIdx){
+        correct++;
+        selected.parentElement.classList.add('correct');
+      }else{
+        selected.parentElement.classList.add('incorrect');
+        radios[correctIdx].parentElement.classList.add('correct');
+      }
+    }
+    answers.push(selIdx);
+  });
+  const total = blocks.length;
+  const pct = Math.round(100*correct/total);
+  const name = document.getElementById('display-name').textContent || '(sem nome)';
+  const stamp = new Date().toISOString();
+  const payload = { name, stamp, correct, total, percent: pct, answers };
+
+  document.getElementById('result').innerHTML =
+    `<strong>Nome:</strong> ${name}<br>` +
+    `<strong>Acertos:</strong> ${correct}/${total} &middot; <strong>Percentual:</strong> ${pct}%`;
+
+  postResults(payload);
+}
+
+function clearQuiz(){
+  document.querySelectorAll('input[type=radio]').forEach(i=>i.checked=false);
+  document.querySelectorAll('label.choice').forEach(l=>l.classList.remove('correct','incorrect'));
+  document.getElementById('result').innerHTML = '—';
+}
+
+async function postResults(payload){
+  const status = document.getElementById('send-status');
+  if(!ENDPOINT || ENDPOINT.indexOf('http')!==0){
+    status.textContent = "Envio por e-mail: configure o ENDPOINT primeiro.";
+    return;
+  }
+  status.textContent = "Enviando resultado por e-mail…";
+  try{
+    // Tentativa com CORS padrão
+    const res = await fetch(ENDPOINT, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload),
+      redirect: 'follow',
+      // Se seu Apps Script não tiver CORS, você pode remover mode: 'cors' e usar 'no-cors'.
+    });
+    if(res.ok){
+      status.textContent = "Enviado com sucesso.";
+    }else{
+      status.textContent = "Enviado (resposta não lida).";
+    }
+  }catch(e){
+    // Fallback no-cors
+    try{
+      await fetch(ENDPOINT, {method:'POST', mode:'no-cors', body: JSON.stringify(payload)});
+      status.textContent = "Enviado (modo compatível).";
+    }catch(err){
+      status.textContent = "Falha no envio.";
+    }
+  }
+}
+</script>
+</body>
+</html>
