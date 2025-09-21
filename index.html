@@ -229,13 +229,5 @@
     }
   })();
 </script>
-
-;
-        const data = await res.json();
-        const el = document.getElementById('visitas');
-        if(el){ el.textContent = '👀 Visitantes: ' + (data.value||0).toLocaleString('pt-BR'); }
-      }catch(err){ console.error('contadorVisitas falhou:', err); }
-    }
-  </script>
 </body>
 </html>
