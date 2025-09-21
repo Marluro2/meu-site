@@ -50,14 +50,11 @@
 }
 
 }, 
-{
-  "titulo": "Equações do 2º grau (atividade)",
-  "descricao": "Equações do 2º grau",
-  "url": "./matematica.html",
-  "data": "2025-09-11",
-  "tags": ["Equações"]
-},
-
-
- 
+ {
+    "titulo": "Equações do 2º grau (atividade)",
+    "descricao": "Equações do 2º grau",
+    "url": "./matematica.html",
+    "data": "2025-09-11",
+    "tags": ["Equações"]
+  }
 ]
