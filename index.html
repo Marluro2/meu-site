@@ -6,159 +6,181 @@
   <title>TEORIAS DA APRENDIZAGEM - PPGECT - Doutorado </title>
   <meta name="description" content="Página oficial das atividades do Programa de Doutorado em Ciências e Tecnologias." />
   <meta property="og:title" content="Atividades do Programa de Doutorado" />
-  <meta property="og:description" content="Página oficial das atividades do Programa de Doutorado em Ciências e Tecnologias." />
+  <meta property="og:description" content="Acompanhe atividades, eventos e materiais do doutorado." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="./img/capa_ppgect.png" />
-  <meta property="og:url" content="." />
-
-  <link rel="icon" href="./img/favicon.png" type="image/png" />
   <style>
     :root{
-      --bg:#0f172a;
-      --card:#111827;
-      --muted:#9ca3af;
-      --text:#f3f4f6;
-      --accent:#22d3ee;
-      --tag:#1f2937;
-      --tag-text:#e5e7eb;
-      --border:#1f2937;
+      --bg:#0b0b0c; --card:#121214; --muted:#2a2a2e; --text:#f6f6f7;
+      --sub:#c7c7cc; --gold:#ffca28; --line:#1f1f23;
     }
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial}
-    header{
-      display:flex;align-items:center;gap:16px;
-      padding:20px 16px;border-bottom:1px solid var(--border);
-      position:sticky;top:0;background:linear-gradient(180deg,rgba(15,23,42,.95),rgba(15,23,42,.85));
-      backdrop-filter:saturate(150%) blur(6px); z-index:10;
-    }
-    header img{width:52px;height:52px;border-radius:12px;border:1px solid var(--border);object-fit:cover}
-    header .titles{display:flex;flex-direction:column}
-    header .titles h1{margin:0;font-size:1.1rem;line-height:1.2}
-    header .titles span{font-size:.9rem;color:var(--muted)}
-    header .meta {margin-left:auto;display:flex;gap:12px;align-items:center}
-    header .meta .pill{
-      border:1px solid var(--border);padding:6px 10px;border-radius:999px;font-size:.85rem;color:var(--muted);
-      display:flex;align-items:center;gap:6px;
-    }
-    header input[type="search"]{
-      width:340px;max-width:50vw;background:#0b1220;color:var(--text);
-      border:1px solid var(--border);border-radius:10px;padding:10px 12px;outline:none;
-    }
-    main{padding:24px;max-width:1100px;margin:0 auto}
-    #mensagem{display:none;margin:24px 0;color:var(--muted)}
-    .grid{
-      display:grid;gap:16px;
-      grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-    }
-    .card{
-      background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;
-      display:flex;flex-direction:column;gap:10px;min-height:160px;
-      transition:transform .12s ease, border-color .12s ease;
-    }
-    .card:hover{transform:translateY(-2px);border-color:#334155}
-    .card h3{margin:0 0 4px 0;font-size:1rem}
-    .card p{margin:0;color:var(--muted);font-size:.95rem}
-    .card .meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
-    .date{font-size:.8rem;color:var(--muted);border:1px dashed var(--border);border-radius:8px;padding:2px 8px}
-    .tag{background:var(--tag);color:var(--tag-text);font-size:.75rem;border-radius:999px;padding:3px 8px;border:1px solid var(--border)}
-    .card a{
-      margin-top:auto;align-self:flex-start;text-decoration:none;color:#0ea5e9;
-      border:1px solid #1f2937;border-radius:8px;padding:8px 10px
-    }
-    footer{
-      margin-top:28px;padding:18px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;color:var(--muted)
-    }
-    .visitas{font-variant-numeric:tabular-nums}
-    @media (max-width:720px){
-      header{flex-wrap:wrap}
-      header input[type="search"]{width:100%;max-width:100%}
-      .meta{width:100%}
-    }
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+
+    /* Header & nav */
+    header{border-bottom:1px solid var(--line);background:var(--card)}
+    .container{max-width:1100px;margin:0 auto;padding:16px}
+    .topbar{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+
+    /* Centralizar ícone e título */
+    .brand { display:flex; align-items:center; justify-content:center; width:100%; text-decoration:none; }
+
+    /* Título maior e dourado */
+    .brand h2 { font-size:32px; color: var(--gold); margin:0; font-weight:900; }
+
+    /* Nav actions (buttons) centralizados */
+    .nav-actions{ display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:wrap; }
+    .nav-actions .btn-nav{ display:inline-flex;align-items:center;gap:8px; padding:10px 14px;border-radius:999px; background:#1f2937;color:var(--gold);text-decoration:none;font-weight:700; border:1px solid #1f1f23;transition:.15s; }
+    .nav-actions .btn-nav:hover{background:#243244}
+
+    /* Hero */
+    .hero{padding:32px 16px;text-align:center}
+    .hero h2{font-size:40px;margin:0 0 8px 0;color:var(--gold)}
+    .hero p{margin:0 auto;max-width:820px;color:var(--sub);font-size:18px;line-height:1.6}
+
+    /* Search */
+    .searchbar{margin:16px auto 0;max-width:780px;padding:0 16px}
+    .searchbar input{ width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line); background:#0f1115;color:var(--text);outline:none;font-size:16px; }
+
+    /* Cards */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px}
+    @media (max-width:900px){ .grid{grid-template-columns:1fr} }
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px}
+    .card h3{margin:0;color:var(--text);font-size:18px}
+    .card p{margin:0;color:var(--sub)}
+    .meta{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{display:inline-block;padding:4px 8px;border-radius:999px;background:#1f2937;color:var(--gold);font-size:12px}
+    .date{color:#a3a3a8;font-size:12px}
+    .card a{margin-top:auto;display:inline-block;background:#1f2937;color:var(--gold);padding:10px 14px;border-radius:999px;text-decoration:none;font-weight:700}
+    .card a:hover{background:#243244}
+
+    /* Footer */
+    footer{border-top:1px solid var(--line);background:var(--card);color:#a3a3a8}
+    footer .container{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+    .msg{padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:#151517;color:var(--sub);margin:0 16px 36px}
+  
+    /* === Sidebar (15 botões à esquerda) === */
+    .page{display:grid;grid-template-columns:220px 1fr;gap:24px;width:100%;margin:0}
+    .sidebar{align-self:start;position:sticky;top:16px;margin-left:0}
+    .side-menu{display:flex;flex-direction:column;gap:10px}
+    .side-btn{ display:block; background:#1f1f23; border:1px solid var(--line); color:var(--text); padding:10px 12px; border-radius:12px; text-decoration:none; text-align:left; font-weight:700; }
+    .side-btn:hover{background:#243244}
+    @media (max-width:900px){ .page{grid-template-columns:1fr} .sidebar{position:static} }
+    
+    /* contador de visitas */
+    .counter{ display:inline-flex; align-items:center; gap:6px; padding:8px 12px; border-radius:999px; background:#151517; border:1px solid var(--line); color:var(--gold); font-weight:700; }
   </style>
 </head>
 <body>
   <header>
-    <img src="./img/logo_ifsp.png" alt="IFSP" />
-    <div class="titles">
-      <h1>PPGECT — Atividades / Teorias da Aprendizagem</h1>
-      <span>Doutorado • UTFPR • <span id="ano"></span></span>
-    </div>
-
-    <div class="meta">
-      <span class="pill visitas" id="visitas">👀 Visitantes: <span id="visitas-num">—</span></span>
-      <input id="q" type="search" placeholder="Pesquisar por título, descrição ou tag…" />
+    <div class="container topbar">
+      <a class="brand" href="./">
+        <span aria-hidden="true">🎓</span>
+        <h2>TEORIAS DA APRENDIZAGEM - PPGECT - Doutorado</h2>
+      </a>
+      $1
+      <span id="visitas" class="counter" title="Contador de visitas">👀 Visitantes: —</span>
     </div>
   </header>
 
   <main>
-    <div id="mensagem">Carregando…</div>
-    <div id="lista" class="grid">
-      <!-- Os cartões serão renderizados via JS -->
+    <div class="page">
+      <aside class="sidebar" aria-label="Navegação lateral">
+        <nav class="side-menu">
+          <a class="side-btn" href="atividade-behaviorismo-antiga.html" target="_blank" rel="noopener">1) Teroria Behavioristas antigas</a>
+          <a class="side-btn" href="#">2) Teorias Cognitivas antigas</a>
+          <a class="side-btn" href="#">3) A teoria behaviorista de Skinner</a>
+          <a class="side-btn" href="gagne.html">4) A teoria de Gagné</a>
+          <!-- NOVO: botão que abre a atividade de Bruner -->
+          <a class="side-btn" href="./atividade-bruner.html">5) Teoria de Bruner — Atividade</a>
+        </nav>
+      </aside>
+
+      <div class="maincol">
+        <section class="hero">
+          <h2>Bem-vindo(a)! A Teoria behaviorista de Skinner </h2>
+          <p> Esta página lista automaticamente as atividades a partir do arquivo <code>docs.json</code>.
+            Use a busca abaixo para encontrar rapidamente um item por título, descrição ou tag.</p>
+          <div class="searchbar">
+            <label class="sr-only" for="q">Buscar</label>
+            <input id="q" type="search" placeholder="Buscar por título, descrição ou tag..." autocomplete="off" />
+          </div>
+        </section>
+
+        <section class="container">
+          <div id="lista" class="grid" aria-live="polite"></div>
+          <p id="mensagem" class="msg" style="display:none"></p>
+        </section>
+      </div>
     </div>
   </main>
 
   <footer>
-    <small>© <span id="ano"></span> PPGECT — Doutorado (UTFPR) • Página do Márcio</small>
-    <small>Build estático • docs.json</small>
+    <div class="container">
+      <p>&copy; <span id="ano"></span> Programa de Doutorado em Ciências e Tecnologias</p>
+      <p>Desenvolvido por Marcio Lucio Rodrigues e hospedado no GitHub Pages</p>
+    </div>
   </footer>
 
-  <!-- Bloco ÚNICO de script com contador robusto (CountAPI + fallback hits.sh) -->
   <script>
-    document.getElementById('ano').textContent = new Date().getFullYear();
+  // === Mantém tudo igual ao original, apenas limpando o bloco e corrigindo o contador ===
+  (function () {
+    // Ano no rodapé/cabeçalho
+    var anoEl = document.getElementById('ano');
+    if (anoEl) anoEl.textContent = new Date().getFullYear();
 
-    let dados = [];
+    var dados = [];
 
     function render(itens){
-      const lista = document.getElementById('lista');
+      var lista = document.getElementById('lista');
       if(!Array.isArray(itens) || itens.length===0){
-        lista.innerHTML = '';
-        const msgEl = document.getElementById('mensagem');
-        if (msgEl) {
-          msgEl.style.display='block';
-          msgEl.textContent = 'Nenhum item encontrado.';
+        if (lista) lista.innerHTML = '';
+        var msg = document.getElementById('mensagem');
+        if (msg) {
+          msg.style.display='block';
+          msg.textContent = 'Nenhum item encontrado.';
         }
         return;
       }
-      const msgEl = document.getElementById('mensagem');
-      if (msgEl) msgEl.style.display='none';
-      lista.innerHTML = itens.map(it => `
-        <div class="card">
-          <h3>${it.titulo || 'Sem título'}</h3>
-          <p>${it.descricao || ''}</p>
-          <div class="meta">
-            ${it.data ? `<span class="date">${new Date(it.data).toLocaleDateString('pt-BR')}</span>`:''}
-            ${(it.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('')}
-          </div>
-          <a href="${it.url}" target="_self" rel="noopener">Abrir</a>
-        </div>
-      `).join('');
+      var msg = document.getElementById('mensagem');
+      if (msg) msg.style.display='none';
+      if (lista) {
+        lista.innerHTML = itens.map(function(it){
+          return (
+            '<div class="card">' +
+              '<h3>' + (it.titulo || 'Sem título') + '</h3>' +
+              '<p>' + (it.descricao || '') + '</p>' +
+              '<div class="meta">' +
+                (it.data ? ('<span class="date">' + new Date(it.data).toLocaleDateString('pt-BR') + '</span>') : '') +
+                ((it.tags||[]).map(function(t){ return '<span class="tag">'+t+'</span>'; }).join('')) +
+              '</div>' +
+              '<a href="' + it.url + '" target="_self" rel="noopener">Abrir</a>' +
+            '</div>'
+          );
+        }).join('');
+      }
     }
 
     function filtrar(q){
       q = (q||'').trim().toLowerCase();
       if(!q){ render(dados); return; }
-      const fil = dados.filter(it => {
-        const base = [
-          it.titulo||'',
-          it.descricao||'',
-          (it.tags||[]).join(' ')
-        ].join(' ').toLowerCase();
+      var fil = dados.filter(function(it){
+        var base = [it.titulo||'', it.descricao||'', (it.tags||[]).join(' ')].join(' ').toLowerCase();
         return base.includes(q);
       });
       render(fil);
     }
 
     async function carregar(){
-      const msg = document.getElementById('mensagem');
+      var msg = document.getElementById('mensagem');
       try{
-        const res = await fetch('./docs.json', {cache:'no-store'});
+        var res = await fetch('./docs.json', {cache:'no-store'});
         if(!res.ok) throw new Error('docs.json não encontrado');
-        const itens = await res.json();
+        var itens = await res.json();
         dados = Array.isArray(itens) ? itens.slice() : [];
-        dados.sort((a,b)=> (b.data||'').localeCompare(a.data||''));
+        dados.sort(function(a,b){ return (b.data||'').localeCompare(a.data||''); });
         render(dados);
       }catch(e){
-        if (msg) {
+        if (msg){
           msg.style.display='block';
           msg.textContent = 'Não foi possível carregar docs.json. Coloque o arquivo na raiz do repositório.';
         }
@@ -166,34 +188,31 @@
       }
     }
 
-    const qEl = document.getElementById('q');
-    if (qEl) qEl.addEventListener('input', e=> filtrar(e.target.value));
-    carregar();
+    var qEl = document.getElementById('q');
+    if (qEl) qEl.addEventListener('input', function(e){ filtrar(e.target.value); });
 
-    // === Contador de visitas ===
+    // === Contador de visitas com fallback discreto ===
     function setBadgeFallback(){
-      // Fallback sem JS/CORS usando badge do hits.sh (conta requisições de imagem)
-      const el = document.getElementById('visitas');
+      var el = document.getElementById('visitas');
       if(!el) return;
-      el.innerHTML = '👀 Visitantes: <img src="https://hits.sh/marcioluciorodrigues.com.br.svg?view=total" alt="Visitantes totais" style="height:16px;vertical-align:middle" referrerpolicy="no-referrer-when-downgrade" />';
+      // Mantém a mesma "pílula", apenas injeta a imagem do hits.sh
+      el.innerHTML = '👀 Visitantes: <img src="https://hits.sh/marcioluciorodrigues.com.br.svg?view=total" alt="Visitantes" style="height:1em;vertical-align:-2px" referrerpolicy="no-referrer-when-downgrade" />';
     }
 
     async function contadorVisitas(){
       try{
-        const ns  = 'ppgect-site';   // namespace estável
-        const key = 'home';          // chave fixa estável
-        const url = 'https://api.countapi.xyz/hit/' +
-                    encodeURIComponent(ns) + '/' +
-                    encodeURIComponent(key);
-        const res  = await fetch(url, {cache:'no-store', mode:'cors'});
+        var ns  = 'ppgect-site';   // namespace estável
+        var key = 'home';          // chave fixa estável
+        var url = 'https://api.countapi.xyz/hit/' + encodeURIComponent(ns) + '/' + encodeURIComponent(key);
+        var res  = await fetch(url, {cache:'no-store'});
         if(!res.ok) throw new Error('CountAPI HTTP ' + res.status);
-        const data = await res.json();
-        const num  = (data && typeof data.value === 'number') ? data.value : null;
-        const tgt  = document.getElementById('visitas-num');
-        if (tgt && num !== null){
-          tgt.textContent = num.toLocaleString('pt-BR');
-        }else{
-          setBadgeFallback();
+        var data = await res.json();
+        var el   = document.getElementById('visitas');
+        if (el){
+          el.textContent = '👀 Visitantes: ' + (data && typeof data.value === 'number' ? data.value : 0).toLocaleString('pt-BR');
+        } else {
+          // Se não achar o span, não altera layout
+          console.warn('#visitas não encontrado.');
         }
       }catch(err){
         console.error('contadorVisitas falhou:', err);
@@ -201,10 +220,21 @@
       }
     }
 
+    // Inicia tudo
+    carregar();
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', contadorVisitas, {once:true});
     } else {
       contadorVisitas();
+    }
+  })();
+</script>
+
+;
+        const data = await res.json();
+        const el = document.getElementById('visitas');
+        if(el){ el.textContent = '👀 Visitantes: ' + (data.value||0).toLocaleString('pt-BR'); }
+      }catch(err){ console.error('contadorVisitas falhou:', err); }
     }
   </script>
 </body>
