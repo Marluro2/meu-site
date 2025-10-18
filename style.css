@@ -223,3 +223,98 @@ body.dark-mode #dialog-box { background-color: var(--card-dark-bg); }
 body.dark-mode .hero-title .brand {
     filter: drop-shadow(0 3px 8px rgba(0,0,0,.35));
 }
+
+
+
+/* === Mobile-first enhancements (Jenny 2025-10-18 v2) === */
+button, .btn, .btn-filled, .btn-outlined, .tool-btn, [role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+input[type="text"], input[type="number"], input[type="email"], input[type="search"], select, textarea {
+  font-size: 16px;
+  padding: 12px 14px;
+}
+@media (max-width: 768px) {
+  header, #header, .app-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .theme-controls, .controls-row, #tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  #tools > * {
+    flex: 1 1 48%;
+  }
+}
+@media (max-width: 900px) {
+  #game-area, .game-area {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  #whiteboard-container, .whiteboard-container {
+    order: 2;
+    min-height: 220px;
+  }
+}
+@media (max-width: 1024px) {
+  #board, .board-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .card-container, .card {
+    height: 160px;
+  }
+}
+@media (max-width: 768px) {
+  #board, .board-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .card-container, .card {
+    height: 180px;
+  }
+  .front-face .header { font-size: 13px; }
+  .front-face .body   { font-size: 13px; line-height: 1.35; }
+  .back-face { font-size: 28px; }
+}
+@media (max-width: 400px) {
+  #board, .board-grid { gap: 10px; }
+  .card-container, .card { height: 190px; }
+  .front-face .header { font-size: 12px; }
+  .front-face .body   { font-size: 12px; }
+}
+@media (max-width: 768px) {
+  .panel-content, .start-panel-content {
+    width: 92%;
+    max-width: 420px;
+    padding: 20px;
+    gap: 16px;
+    margin: 0 auto;
+  }
+  .name-inputs, .inputs-row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+}
+@media (max-width: 480px) {
+  #dialog-box, .dialog, .modal {
+    width: 90%;
+    max-width: none;
+    padding: 16px;
+  }
+  #dialog-content { font-size: 14px; }
+}
+canvas, #whiteboard-canvas { touch-action: none; }
+html, body {
+  min-height: 100%;
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+}
