@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memória Financeira — 2 Jogadores (Kids++)</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="theme-kids">
+
+    <div id="start-panel" class="panel">
+        <div class="panel-content">
+            <h1>Quem vai jogar? 🎮</h1>
+            <p>Preencha os nomes e clique em Continuar</p>
+            <div class="name-inputs">
+                <input type="text" id="name1" placeholder="Jogador 1 🐯">
+                <input type="text" id="name2" placeholder="Jogador 2 🐼">
+            </div>
+            <button id="process-names-btn" class="btn-filled">Continuar</button>
+        </div>
+    </div>
+
+    <div id="confirm-panel" class="panel hidden">
+        <div class="panel-content">
+            <h2 id="confirm-text">Olá! Estão prontos?</h2>
+            <p>O jogo começará na Fase 1 (Porcentagem Aplicada).</p>
+            <button id="init-game-btn" class="btn-filled large">INICIAR JOGO</button>
+        </div>
+    </div>
+
+    <div id="game-screen" class="hidden">
+        <header id="header">
+            <div class="header-info">
+                <h1 id="title">Memória Financeira</h1>
+                <h2 id="subtitle">Fase 1 — Porcentagem Aplicada 🎯</h2>
+                <p id="rules">Acerte os pares (problema ↔ resposta). Quem acerta continua!</p>
+                <div class="theme-controls">
+                    <label for="palette-dd">Paleta:</label>
+                    <select id="palette-dd">
+                        <option value="Kids">Kids</option>
+                        <option value="Neon">Neon</option>
+                        <option value="Pastel">Pastel</option>
+                    </select>
+                    <div class="switch-container">
+                        <label for="dark-switch">Escuro</label>
+                        <label class="switch">
+                            <input type="checkbox" id="dark-switch">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <span id="time-txt">⏱ 75s</span>
+                </div>
+            </div>
+            <div class="game-status">
+                <div id="chip-turn" class="chip">Vez: ...</div>
+                <div id="chip-score" class="chip">Placar: 0 × 0</div>
+            </div>
+        </header>
+
+        <div id="tools">
+            <button id="btn-repeat" class="btn-outlined">Repetir fase</button>
+            <button id="btn-restart" class="btn-outlined">Reiniciar jogo</button>
+            <button id="btn-advance" class="btn-filled hidden">Avançar Fase 🚀</button>
+        </div>
+
+        <div id="game-area">
+            <main id="board"></main>
+            <aside id="whiteboard-container">
+                <h2>Lousa de Anotações 📝</h2>
+                <div id="whiteboard-tools">
+                    <button class="tool-btn active" data-action="color" data-color="#000000" style="background-color: #000000;"></button>
+                    <button class="tool-btn" data-action="color" data-color="#E74C3C" style="background-color: #E74C3C;"></button>
+                    <button class="tool-btn" data-action="color" data-color="#3498DB" style="background-color: #3498DB;"></button>
+                    <button class="tool-btn" data-action="eraser" title="Borracha">Borracha</button>
+                    <button class="tool-btn" data-action="clear" title="Limpar Tudo">Limpar</button>
+                </div>
+                <canvas id="whiteboard-canvas"></canvas>
+            </aside>
+        </div>
+    </div>
+
+    <div id="dialog-overlay" class="hidden">
+        <div id="dialog-box">
+            <h2 id="dialog-title">Título</h2>
+            <p id="dialog-content">Conteúdo</p>
+            <div class="dialog-actions">
+                <button id="dialog-ok" class="btn-text">OK</button>
+                <button id="dialog-restart" class="btn-text hidden">Recomeçar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
